@@ -104,23 +104,44 @@ module.exports =
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! isomorphic-unfetch */ "isomorphic-unfetch");
+/* harmony import */ var isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_1__);
 var _jsxFileName = "/Users/sorr/Study/mamago-web/pages/index.js";
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
-const Index = () => __jsx("div", {
+
+const Index = props => __jsx("div", {
   __source: {
     fileName: _jsxFileName,
-    lineNumber: 2
+    lineNumber: 4
   },
   __self: undefined
 }, __jsx("h1", {
   __source: {
     fileName: _jsxFileName,
-    lineNumber: 3
+    lineNumber: 5
   },
   __self: undefined
-}, "\uC548\uB155, Next.js"));
+}, "\uC548\uB155, Next.js"), __jsx("h1", {
+  __source: {
+    fileName: _jsxFileName,
+    lineNumber: 6
+  },
+  __self: undefined
+}, "Data: ", props.show.data));
+
+Index.getInitialProps = async function (context) {
+  const {
+    id
+  } = context.query;
+  const res = await isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_1___default()(`http://localhost:3030/`);
+  const show = await res.json();
+  console.log(`Fetched show: ${show.data}`);
+  return {
+    show
+  };
+};
 
 /* harmony default export */ __webpack_exports__["default"] = (Index);
 
@@ -135,6 +156,17 @@ const Index = () => __jsx("div", {
 
 module.exports = __webpack_require__(/*! /Users/sorr/Study/mamago-web/pages/index.js */"./pages/index.js");
 
+
+/***/ }),
+
+/***/ "isomorphic-unfetch":
+/*!*************************************!*\
+  !*** external "isomorphic-unfetch" ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("isomorphic-unfetch");
 
 /***/ }),
 
