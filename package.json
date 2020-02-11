@@ -21,10 +21,10 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "env-path -p .env.production react-app-rewired build",
-    "build:staging": "env-path -p .env.staging react-app-rewired build",
-    "test": "react-app-rewired test",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },

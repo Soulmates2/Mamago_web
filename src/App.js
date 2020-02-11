@@ -6,6 +6,7 @@ import * as R from 'ramda';
 import { API_ADDR } from './common';
 
 import Login from './pages/Login';
+import Main from './pages/Main';
 
 const history = createBrowserHistory();
 
@@ -19,7 +20,7 @@ const ScrollToTop = withRouter(({ children, location: { pathname } }) => {
 
 const CookieAuthenticatedRoute = ({ component: Component, ...rest }) => {
   const cookie_access_token = Cookies.get('access_token');
-  if (R.isNil(cookie_access_token)) return <Login />;
+  // if (R.isNil(cookie_access_token)) return <Login />;
   return <Route {...rest} component={Component} />;
 };
 
@@ -29,7 +30,7 @@ const App = () => {
       <ScrollToTop>
         <Suspense fallback="loading">
           <Switch>
-            <CookieAuthenticatedRoute exact path="/" component={MainPage} />
+            <CookieAuthenticatedRoute exact path="/" component={Main} />
           </Switch>
         </Suspense>
       </ScrollToTop>
