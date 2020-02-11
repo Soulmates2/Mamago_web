@@ -5,8 +5,12 @@ import { createBrowserHistory } from 'history';
 import * as R from 'ramda';
 import { API_ADDR } from './common';
 
-import Login from './pages/Login';
-import Main from './pages/Main';
+import LoginPage from './pages/LoginPage';
+import IntroPage from './pages/IntroPage';
+import ChattingPage from './pages/ChattingPage';
+import LogsPage from './pages/LogsPage';
+import UserChattingPage from './pages/UserChattingPage';
+import UserLogsPage from './pages/UserLogsPage';
 
 const history = createBrowserHistory();
 
@@ -30,7 +34,12 @@ const App = () => {
       <ScrollToTop>
         <Suspense fallback="loading">
           <Switch>
-            <CookieAuthenticatedRoute exact path="/" component={Main} />
+            <Route exact path="/chat/:chat_id" component={ChattingPage} />
+            <Route exact path="/me/chat/:chat_id" component={UserChattingPage} />
+            <Route exact path="/logs" component={LogsPage} />
+            <Route exact path="/me/logs" component={UserLogsPage} />
+            <Route exact path="/login" component={LoginPage} />
+            <Route exact path="/" component={IntroPage} />
           </Switch>
         </Suspense>
       </ScrollToTop>
