@@ -91,8 +91,11 @@ const Header = props => {
       <>
         <NavHeader>
           <span>
-            <Logo src={require("../images/main_icon.png")}></Logo>
-            <FontsHeader>MAMAGO</FontsHeader>
+            <Logo src={require("../images/mamago_logo.png")}></Logo>
+            <FontsHeader>Mamago</FontsHeader>
+          </span>
+          <span>
+            <button onClick src={require("../icons/menu.png")}></button>
           </span>
           <ButtonStyle type="button" onClick={onIncrease}>
             <ImageButton src={require("../icons/menu.png")}/>

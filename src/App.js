@@ -34,8 +34,8 @@ const App = () => {
       <ScrollToTop>
         <Suspense fallback="loading">
           <Switch>
-            <Route exact path="/chat/:chat_id" component={ChattingPage} />
-            <Route exact path="/me/chat/:chat_id" component={UserChattingPage} />
+            <Route exact path="/chat/" component={ChattingPage} />
+            <Route exact path="/me/chat/" component={UserChattingPage} />
             <Route exact path="/logs" component={LogsPage} />
             <Route exact path="/me/logs" component={UserLogsPage} />
             <Route exact path="/login" component={LoginPage} />
