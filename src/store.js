@@ -2,12 +2,21 @@ import { compose, createStore, combineReducers, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import { user, errors, fetchs, dialog, dialogs, chats } from './reducers';
 const persistConfig = {
   key: 'mamago',
-  storage
+  storage,
+  whitelist: ['user, dialogs']
 };
 
-const appReducer = combineReducers({});
+const appReducer = combineReducers({
+  user,
+  dialogs,
+  dialog,
+  errors,
+  fetchs,
+  chats
+});
 
 const rootReducer = (state, action) => {
   return appReducer(state, action);

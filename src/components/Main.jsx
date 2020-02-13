@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const MainStyle = styled.div`
@@ -10,17 +10,10 @@ const MainStyle = styled.div`
   box-sizing: border-box;
 `;
 
-
-
 const Main = props => {
   const { children } = props;
 
-  return (
-      
-      <MainStyle>
-          {children}
-      </MainStyle>
-  );
+  return <MainStyle>{children}</MainStyle>;
 };
 
 export default Main;
