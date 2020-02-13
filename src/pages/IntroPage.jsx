@@ -1,11 +1,14 @@
 import React from 'react';
 import Header from '../components/Header';
+import Main from '../components/Main';
 
 const IntroPage = props => {
   return (
     <>
       <Header />
-      <div>IntroPage!!</div>
+      <Main>
+        <div>IntroPage!!</div>
+      </Main>
     </>
   );
 };

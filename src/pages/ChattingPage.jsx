@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import styled from 'styled-components';
 import Header from '../components/Header';
+import Main from '../components/Main';
+import styled from 'styled-components';
 
 const Block = styled.div`
   position: absolute;
@@ -99,29 +100,32 @@ const ChattingPage = props => {
 
   return (
     <>
-      <Block>
-        <Title>
-          <Image src={require("../images/mamago_logo.png")} />
-          <Text>MAMAGO</Text>
-        </Title>
-        <Background>
-          <MessageContainer>
-            <MamagoMessage>Question</MamagoMessage>
-          </MessageContainer>
+      <Header/>
+      <Main>
+        <Block>
+          <Title>
+            <Image src={require("../images/mamago_logo.png")} />
+            <Text>MAMAGO</Text>
+          </Title>
+          <Background>
+            <MessageContainer>
+              <MamagoMessage>Question</MamagoMessage>
+            </MessageContainer>
 
-          <MessageContainer>
-            <UserMessage>Answer</UserMessage>
-          </MessageContainer>
-        </Background>
-        <div>
-          <span>
-            <UserInput name="original" placeholder="마마고와 대화를 시작하세요!" onChange={onChange} value={original} />
-          </span>
-          <span>
-            <SendButton onClick={onClick}><img src={require("../images/send.png")}/></SendButton>
-          </span>
-        </div>
-      </Block>
+            <MessageContainer>
+              <UserMessage>Answer</UserMessage>
+            </MessageContainer>
+          </Background>
+          <div>
+            <span>
+              <UserInput name="original" placeholder="마마고와 대화를 시작하세요!" onChange={onChange} value={original} />
+            </span>
+            <span>
+              <SendButton onClick={onClick}><img src={require("../images/send.png")}/></SendButton>
+            </span>
+          </div>
+        </Block>    
+      </Main>
 
       <div>
         <b>value: </b>
