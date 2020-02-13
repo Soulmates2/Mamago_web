@@ -24,7 +24,8 @@ const NavHeader = styled.nav`
 const FontsHeader = styled.span`
   vertical-align: middle;
   color: white;
-
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
 `
 
 const Logo = styled.img`
