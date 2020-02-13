@@ -24,7 +24,8 @@ const NavHeader = styled.nav`
 const FontsHeader = styled.span`
   vertical-align: middle;
   color: white;
-
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
 `
 
 const Logo = styled.img`
@@ -93,9 +94,6 @@ const Header = props => {
           <span>
             <Logo src={require("../images/mamago_logo.png")}></Logo>
             <FontsHeader>Mamago</FontsHeader>
-          </span>
-          <span>
-            <button onClick src={require("../icons/menu.png")}></button>
           </span>
           <ButtonStyle type="button" onClick={onIncrease}>
             <ImageButton src={require("../icons/menu.png")}/>
