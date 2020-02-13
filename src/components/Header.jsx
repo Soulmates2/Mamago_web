@@ -38,7 +38,7 @@ const Header = props => {
       <StyledHeader>
         <nav> 
           <span>
-            <Logo src={require("../images/main_icon.png")}></Logo>
+            <Logo src={require("../images/mamago_logo.png")}></Logo>
             <FontsHeader>Mamago</FontsHeader>
           </span>
           <span>
