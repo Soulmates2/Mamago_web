@@ -5,12 +5,13 @@ import { createBrowserHistory } from 'history';
 import * as R from 'ramda';
 import { API_ADDR } from './common';
 
-import LoginPage from './empty_pages/LoginPage';
-import IntroPage from './empty_pages/IntroPage';
-import ChattingPage from './empty_pages/ChattingPage';
+import LoginPage from './pages/LoginPage';
+import IntroPage from './pages/IntroPage';
+import ChattingPage from './pages/ChattingPage';
 import LogsPage from './pages/LogsPage';
-import UserChattingPage from './empty_pages/UserChattingPage';
-import UserLogsPage from './empty_pages/UserLogsPage';
+import UserChattingPage from './pages/UserChattingPage';
+import UserLogsPage from './pages/UserLogsPage';
+
 
 const history = createBrowserHistory();
 
