@@ -16,7 +16,7 @@ const example = {
   question: '안녕 오늘 하루는 어땠어?',
   original: 'im so tired',
   translated: `I'm so tired`,
-  comprehanded: '나는 피곤해',
+  comprehended: '나는 피곤해',
   user_intention: '피곤한 하루였어',
   user_intention_translated: 'it was so tired day'
 };
@@ -30,7 +30,7 @@ const ChatList = props => {
 const STEP = {
   question: 0,
   original: 1,
-  comprehanded: 2,
+  comprehended: 2,
   translated: 3,
   feedback: 4,
   user_intention: 5,
@@ -97,7 +97,7 @@ const ChattingPage = props => {
 
   const handleInput = e => {
     e.preventDefault();
-    dispatch(fetchUserDialogs());
+    // dispatch(fetchUserDialogs());
     setMessage(e.target.value);
   };
 

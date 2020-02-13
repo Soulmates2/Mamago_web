@@ -7,6 +7,7 @@ import { API_ADDR } from './common';
 
 import LoginPage from './pages/LoginPage';
 import IntroPage from './pages/IntroPage';
+import TempChatting from './empty_pages/ChattingPage';
 import ChattingPage from './pages/ChattingPage';
 import LogsPage from './pages/LogsPage';
 import UserChattingPage from './pages/UserChattingPage';
@@ -34,6 +35,7 @@ const App = () => {
       <ScrollToTop>
         <Suspense fallback="loading">
           <Switch>
+            <Route exact path="/tempchat" component={TempChatting}/>
             <Route exact path="/chat" component={ChattingPage} />
             <Route exact path="/me/chat" component={UserChattingPage} />
             <Route exact path="/logs" component={LogsPage} />
