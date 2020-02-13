@@ -12,6 +12,7 @@ import LogsPage from './pages/LogsPage';
 import UserChattingPage from './pages/UserChattingPage';
 import UserLogsPage from './pages/UserLogsPage';
 
+
 const history = createBrowserHistory();
 
 const ScrollToTop = withRouter(({ children, location: { pathname } }) => {

@@ -205,25 +205,32 @@ function User({ user, isDate, isSubject, isInput, isOutput, isHangeul }) {
 
 const LogShowLine = styled.div`
   padding: 0.3rem 0px;
+  font-size: 1rem;
 `;
 
-const DateStyle = styled.span`
+const DateStyle = styled.div`
   color: Red;
-  font-size: small;
+  font-size: 0.8rem;
+  padding-top: 0.3rem;
+  padding-bottom: 0.6rem;
+  font-weight: bold;
 `;
 
 function ReturnDate() {
   return (
-    <LogShowLine>
-      <DateStyle># 2019-02-13</DateStyle>
-    </LogShowLine>
+
+    <DateStyle># 2019-02-13</DateStyle>
+
   );
 }
 
 const TitleStyle = styled.span`
   font-weight: bold;
+  font-size: 0.9rem;
 `;
-const ContextStyle = styled.span``;
+const ContextStyle = styled.span`
+  font-size: 0.9rem;
+`;
 
 function ReturnSubject() {
   return (
@@ -272,6 +279,7 @@ function ReturnUserIntendTrans() {
 
 const LogShowBlock = styled.div`
   padding: 0.5rem 0px;
+  position: relative;
 `;
 
 {
@@ -280,7 +288,7 @@ const LogShowBlock = styled.div`
 const BindKey = bindKeyboard(SwipeableViews);
 
 const PageStyle = styled.div`
-  padding: 1rem;
+  padding: 0.6rem;
   height: 22rem;
   color: black;
 
@@ -289,19 +297,85 @@ const PageStyle = styled.div`
   border-radius: 10px;
 `;
 
+const BubbleRight = styled.div`
+  position: relative;
+  padding: 0.5rem 1rem;
+  color: black;
+  border-radius: 30px;
+  margin-right: 2rem;
+  margin-left: 4rem;
+  background: #ffd966;
+
+  :after {
+    content:"";
+    position:absolute;
+    border-style:solid;
+
+    /* reduce the damage in FF3.0 */
+    display:block;
+    width:0;
+    
+    top: 1rem;
+    right:-1.3rem; /* value = - border-left-width - border-right-width */
+    bottom: auto;
+    left: auto;
+    border-width: 1rem 0 0 1.5rem; /* vary these values to change the angle of the vertex */
+    border-color:transparent #ffd966 ;
+  }
+`
+
+const BubbleLeft = styled.div`
+
+  position:relative;
+  padding: 0.5rem 1rem;
+  color: black;
+  border-radius: 30px;
+
+  margin-left: 2rem;
+  margin-right: 4rem;
+  background: #d1c4e9;
+  z-index: 2;
+
+  :after {
+    content: "";
+    position: absolute;
+    border-style: solid;
+    /* reduce the damage in FF3.0 */
+    display:block;
+    width: 0;
+
+    top: 1rem;
+    left: -1.3rem; /* value = - border-left-width - border-right-width */
+    bottom:auto;
+    border-width: 1rem 1.5rem 0 0; /* vary these values to change the angle of the vertex */
+    border-color:transparent #d1c4e9;
+    z-index: 1;
+  }
+
+`
+
+
+
 const Swipe = () => {
   return (
     <BindKey>
       <PageStyle>
         <ReturnDate />
-        <ReturnSubject />
+        <BubbleLeft>
+          <ReturnSubject />
+        </BubbleLeft>
+        
         <LogShowBlock>
-          <ReturnInput />
-          <ReturnUserIntend />
+          <BubbleRight>
+            <ReturnInput />
+            <ReturnUserIntend />
+          </BubbleRight>
         </LogShowBlock>
         <LogShowBlock>
-          <ReturnOutput />
-          <ReturnUserIntendTrans />
+          <BubbleLeft>
+            <ReturnOutput />
+            <ReturnUserIntendTrans />
+          </BubbleLeft>
         </LogShowBlock>
       </PageStyle>
       <PageStyle>slide 2</PageStyle>
