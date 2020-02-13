@@ -26,7 +26,7 @@ const ImageHeader = styled.img`
   vertical-align: middle;
 `;
 
-const LoginHeader = styled.input`
+const LoginInput = styled.input`
   width: 300px;
   height: 30px;
   font-size: 15px;
@@ -77,10 +77,10 @@ function LoginPage() {
           <TextHeader>Mamago</TextHeader>
         </TitleHeader>
         <div>
-          <LoginHeader name="id" placeholder="아이디" onChange={onChange} value={id} />
+          <LoginInput name="id" placeholder="아이디" onChange={onChange} value={id} />
         </div>
         <div>
-          <LoginHeader name="password" placeholder="비밀번호" onChange={onChange} value={password}/>
+          <LoginInput name="password" placeholder="비밀번호" onChange={onChange} value={password}/>
         </div>
         <div>
           <ButtonHeader onClick={onClick}>로그인</ButtonHeader>
