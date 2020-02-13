@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Header from '../components/Header';
 import Main from '../components/Main';
 import styled from 'styled-components';
@@ -27,7 +27,6 @@ const Image = styled.img`
   vertical-align: middle;
 `;
 
-
 const Background = styled.div`
   width: 340px;
   height: 400px;
@@ -52,7 +51,6 @@ const UserMessage = styled.div`
   text-align: left;
 `;
 
-
 const UserInput = styled.input`
   width: 280px;
   height: 30px;
@@ -65,7 +63,7 @@ const SendButton = styled.button`
   vertical-align: middle;
   background-color: transparent;
   border: none;
-  img{
+  img {
     width: 40px;
     height: 40px;
   }
@@ -82,29 +80,29 @@ const ChattingPage = props => {
     user_intention_translated: ''
   });
 
-  const {original} = inputs;
+  const { original } = inputs;
 
-  const onChange = (e) => {
-    const{value, name} = e.target;
+  const onChange = e => {
+    const { value, name } = e.target;
     setInputs({
       ...inputs,
       [name]: value
-    })
+    });
   };
 
   const onClick = () => {
     setInputs({
       original: ''
-    })
+    });
   };
 
   return (
     <>
-      <Header/>
+      <Header />
       <Main>
         <Block>
           <Title>
-            <Image src={require("../images/mamago_logo.png")} />
+            <Image src={require('../images/mamago_logo.png')} />
             <Text>MAMAGO</Text>
           </Title>
           <Background>
@@ -118,21 +116,28 @@ const ChattingPage = props => {
           </Background>
           <div>
             <span>
-              <UserInput name="original" placeholder="마마고와 대화를 시작하세요!" onChange={onChange} value={original} />
+              <UserInput
+                name="original"
+                placeholder="마마고와 대화를 시작하세요!"
+                onChange={onChange}
+                value={original}
+              />
             </span>
             <span>
-              <SendButton onClick={onClick}><img src={require("../images/send.png")}/></SendButton>
+              <SendButton onClick={onClick}>
+                <img src={require('../images/send.png')} />
+              </SendButton>
             </span>
           </div>
-        </Block>    
+        </Block>
       </Main>
 
       <div>
         <b>value: </b>
-          {original}
+        {original}
       </div>
     </>
-  )
-}
+  );
+};
 
 export default ChattingPage;

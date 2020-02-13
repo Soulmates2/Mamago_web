@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import SwipeableViews from 'react-swipeable-views';
 import { bindKeyboard } from 'react-swipeable-views-utils';
 import Calendar from 'react-calendar';
-import '../font.css';
 
 {
   /* Data List from server */
@@ -17,8 +16,7 @@ const logs = [
     subject: 'daily log',
     input: 'I ate milk-tea. It was so delicious.',
     output: 'I ate mild tea. It was so delicious.',
-    user_intend: '나는 밀크티를 먹었다. 매우 맛있었다.',
-    user_intend_translate: '나는 밀크티를 먹었다. 매우 맛있었다.'
+    hangeul: '나는 밀크티를 먹었다. 매우 맛있었다.'
   },
   {
     id: '2',
@@ -26,8 +24,7 @@ const logs = [
     subject: 'favorite music',
     input: 'I like ambition music. There music is so emphathsis.',
     output: 'I like ambition music. Music is very sympathetic there.',
-    user_intend: '나는 엠비션 뮤직을 좋아한다. 그들의 음악은 매우 공감된다.',
-    usr_intend_translate: '나는 엠비션 뮤직을 좋아한다. 그들의 음악은 매우 공감된다.'
+    hangeul: '나는 엠비션 뮤직을 좋아한다. 그들의 음악은 매우 공감된다.'
   }
 ];
 
@@ -45,14 +42,13 @@ const WholeBox = styled.div`
 
 const SearchBox = styled.div`
   width: 20rem;
-  left: ;
 `;
 
 const SearchInput = styled.input`
-  width: 15rem;
+  width: 12rem;
   height: 2rem;
   font-size: 15px;
-  border: 2px solid black;
+  border: 1px solid black;
   border-radius: 10px;
 
   // background-image: url('../icons/search.png');
@@ -68,7 +64,7 @@ const SearchButtons = styled.button`
   border: none;
   cursor: pointer;
   position: absolute;
-  left: 15.5rem;
+  left: 12.5rem;
   height: 2rem;
 
   img {
@@ -81,7 +77,7 @@ const SearchButtons = styled.button`
   }
 `;
 
-const ClockButtons = styled.button`
+const Buttons = styled.button`
   outline-color: #d48a6e;
   background-color: transparent;
   border: none;
@@ -91,9 +87,10 @@ const ClockButtons = styled.button`
   img {
     border: none;
     background-color: none;
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     vertical-align: middle;
+    margin-top: 3px;
   }
 `;
 
@@ -112,11 +109,10 @@ const ModalWapper = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  // background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.5);
   align-items: center;
   justify-content: center;
   display: ${props => (props.display ? 'flex' : 'none')};
-  z-index: 2;
 `;
 
 const Modal = styled.div`
@@ -127,9 +123,8 @@ const Modal = styled.div`
 `;
 
 const ModalTitle = styled.div`
-  font-size: 1.5rem;
+  font-size: 24px;
   font-weight: bold;
-  text-align: center;
 `;
 
 const CloseWrapper = styled.div`
@@ -171,16 +166,15 @@ const ClockButton = props => {
 
   return (
     <>
-      <ClockButtons type="button" onClick={onClickOpen}>
+      <Buttons type="button" onClick={onClickOpen}>
         <img src={require('../icons/clock.png')} />
-      </ClockButtons>
+      </Buttons>
       <ModalWapper display={state}>
         <Modal>
           <ModalTitle>타임머신</ModalTitle>
           <Calendar onChange={onDateChange} value={date.day} />
           <CloseWrapper>
-            <button onClick={onClickClose}>취소</button>
-            <button>선택</button>
+            <button onClick={onClickClose}>close</button>
           </CloseWrapper>
         </Modal>
       </ModalWapper>
@@ -203,109 +197,95 @@ function User({ user, isDate, isSubject, isInput, isOutput, isHangeul }) {
   );
 }
 
-const LogShowLine = styled.div`
-  padding: 0.3rem 0px;
-`;
-
-const DateStyle = styled.span`
-  color: Red;
-  font-size: small;
-`;
-
 function ReturnDate() {
   return (
-    <LogShowLine>
-      <DateStyle># 2019-02-13</DateStyle>
-    </LogShowLine>
+    <span>
+      <User
+        isDate={true}
+        isSubject={false}
+        isInput={false}
+        isOutput={false}
+        isHangeul={false}
+        user={logs[0]}
+      />
+    </span>
   );
 }
 
-const TitleStyle = styled.span`
-  font-weight: bold;
-`;
-const ContextStyle = styled.span``;
-
 function ReturnSubject() {
   return (
-    <LogShowLine>
-      <TitleStyle>질문: </TitleStyle>
-      <ContextStyle>오늘 점심 뭐 먹었어?</ContextStyle>
-    </LogShowLine>
+    <div>
+      subject:{' '}
+      <User
+        isDate={false}
+        isSubject={true}
+        isInput={false}
+        isOutput={false}
+        isHangeul={false}
+        user={logs[0]}
+      />
+    </div>
   );
 }
 
 function ReturnInput() {
   return (
-    <LogShowLine>
-      <TitleStyle>나의영작: </TitleStyle>
-      <ContextStyle>I drink water.</ContextStyle>
-    </LogShowLine>
-  );
-}
-
-function ReturnUserIntend() {
-  return (
-    <LogShowLine>
-      <TitleStyle>나의의도: </TitleStyle>
-      <ContextStyle>나는 물을 마셨다</ContextStyle>
-    </LogShowLine>
+    <div>
+      input:{' '}
+      <User
+        isDate={false}
+        isSubject={false}
+        isInput={true}
+        isOutput={false}
+        isHangeul={false}
+        user={logs[0]}
+      />
+    </div>
   );
 }
 
 function ReturnOutput() {
   return (
-    <LogShowLine>
-      <TitleStyle>좋은영작: </TitleStyle>
-      <ContextStyle>I drink water.</ContextStyle>
-    </LogShowLine>
+    <div>
+      output:{' '}
+      <User
+        isDate={false}
+        isSubject={false}
+        isInput={false}
+        isOutput={true}
+        isHangeul={false}
+        user={logs[0]}
+      />
+    </div>
   );
 }
 
-function ReturnUserIntendTrans() {
+function ReturnHangeul() {
   return (
-    <LogShowLine>
-      <TitleStyle>좋은해석: </TitleStyle>
-      <ContextStyle>나는 물을 마셨다.</ContextStyle>
-    </LogShowLine>
+    <div>
+      subject:{' '}
+      <User
+        isDate={false}
+        isSubject={false}
+        isInput={false}
+        isOutput={false}
+        isHangeul={true}
+        user={logs[0]}
+      />
+    </div>
   );
 }
-
-const LogShowBlock = styled.div`
-  padding: 0.5rem 0px;
-`;
 
 {
   /* Swipe */
 }
 const BindKey = bindKeyboard(SwipeableViews);
-
-const PageStyle = styled.div`
-  padding: 1rem;
-  height: 22rem;
-  color: black;
-
-  background-color: #e4efff;
-  z-index: 1;
-  border-radius: 10px;
-`;
-
 const Swipe = () => {
   return (
     <BindKey>
-      <PageStyle>
-        <ReturnDate />
-        <ReturnSubject />
-        <LogShowBlock>
-          <ReturnInput />
-          <ReturnUserIntend />
-        </LogShowBlock>
-        <LogShowBlock>
-          <ReturnOutput />
-          <ReturnUserIntendTrans />
-        </LogShowBlock>
-      </PageStyle>
-      <PageStyle>slide 2</PageStyle>
-      <PageStyle>slide 3</PageStyle>
+      <div>slide 1</div>
+      <div>slide 2</div>
+      <div>slide 3</div>
     </BindKey>
   );
 };
@@ -325,6 +305,12 @@ const LogsPage = props => {
               <img src={require('../icons/search.png')} />
             </SearchButtons>
             <ClockButton />
+            <Buttons>
+              <img src={require('../icons/up_button.png')} />
+            </Buttons>
+            <Buttons>
+              <img src={require('../icons/down_button.png')} />
+            </Buttons>
           </SearchBox>
           <ShowBox>
             <Swipe />
