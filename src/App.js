@@ -5,8 +5,9 @@ import { createBrowserHistory } from 'history';
 import * as R from 'ramda';
 import { API_ADDR } from './common';
 
-import LoginPage from './pages/LoginPage';
 import IntroPage from './pages/IntroPage';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
 import TempChatting from './empty_pages/ChattingPage';
 import ChattingPage from './pages/ChattingPage';
 import LogsPage from './pages/LogsPage';
@@ -42,6 +43,7 @@ const App = () => {
             <Route exact path="/logs" component={LogsPage} />
             <Route exact path="/me/logs" component={UserLogsPage} />
             <Route exact path="/login" component={LoginPage} />
+            <Route exact path="/signup" component={SignupgPage} />
             <Route exact path="/" component={IntroPage} />
           </Switch>
         </Suspense>

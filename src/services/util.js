@@ -46,18 +46,18 @@ export const buildChats = dialog => {
     chats.push({ type: "user", message: original });
     if (comprehanded) chats.push({ type: "mamago", message: I18n.t('comp_prefix') + comprehanded + I18n.t('comp_postfix') });
     if (translated) chats.push( { type: "mamago", message: I18n.t('trans_prefix') + translated + I18n.t('trans_postfix') });
-    if (comprehanded) chats.push({ type: "mamago", message: '내가 생각한 게 맞아?' });
+    if (comprehanded) chats.push({ type: "mamago", message: '내가 이해한 게 맞니?' });
   }
 
   if (!R.isNil(feedback)) {
     if (!feedback) {
       chats.push({ type: "user", message: '맞아' });
-      chats.push({ type: "mamago", message: '잘했어!' });
+      chats.push({ type: "mamago", message: '정확하게 말했는 걸! 아주 칭찬해~' });
       return chats;
     } 
     else {
       chats.push({ type: "user", message: '아니야' });
-      chats.push({ type: "mamago", message: '그렇다면 네가 의도한 것을 말해줄래?' });
+      chats.push({ type: "mamago", message: '그러면 어떤 뜻인지 한글로 말해줄래?' });
     }
     
     if (user_intention) {
