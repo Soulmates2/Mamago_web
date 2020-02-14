@@ -69,7 +69,10 @@ export const buildChats = dialog => {
     if (user_intention) {
       chats.push({ type: 'user', message: user_intention });
       if (user_intention_translated)
-        chats.push({ type: 'mamago', message: user_intention_translated });
+        chats.push({
+          type: 'mamago',
+          message: I18n.t('intent_prefix') + user_intention_translated + I18n.t('intent_postfix')
+        });
     }
   }
   return chats;

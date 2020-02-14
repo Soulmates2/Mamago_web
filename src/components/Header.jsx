@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router';
 
 // const StyledHeader = styled.div`
 //   height: 40px;
@@ -59,15 +60,30 @@ const UlHeader = styled.ul`
 
   li {
     font-weight: bold;
+    a {
+      color: white;
+      z-index: 999;
+    }
   }
 `;
 
-const SideList = () => {
+const Links = () => {
+  const history = useHistory();
+  const go = url => e => {
+    e.preventDefault();
+    history.push(url);
+  };
   return (
     <UlHeader>
-      <li>hi</li>
-      <li>Hello</li>
-      <li>Bye</li>
+      <li>
+        <a onClick={go('/')}>Main</a>
+      </li>
+      <li>
+        <a onClick={go('/chat')}>Chat</a>
+      </li>
+      <li>
+        <a onClick={go('/logs')}>Records</a>
+      </li>
     </UlHeader>
   );
 };
@@ -92,7 +108,7 @@ const Header = props => {
         <ButtonStyle type="button" onClick={onIncrease}>
           <ImageButton src={require('../icons/menu.png')} />
         </ButtonStyle>
-        {toggle && <SideList />}
+        {toggle && <Links />}
       </NavHeader>
       {children}
     </>

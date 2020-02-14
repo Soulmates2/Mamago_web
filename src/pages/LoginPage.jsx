@@ -52,7 +52,7 @@ const ButtonHeader = styled.button`
   font-size: 16px;
 `;
 
-function SignupPage(props) {
+function LoginPage(props) {
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -108,12 +108,18 @@ function SignupPage(props) {
           type="password"
         />
 
-        <div>
-          <ButtonHeader onClick={onClick}>가입하기</ButtonHeader>
-        </div>
+        <ButtonHeader onClick={onClick}>로그인</ButtonHeader>
+        <ButtonHeader
+          onClick={e => {
+            e.preventDefault();
+            history.push('/signup');
+          }}
+        >
+          가입하기
+        </ButtonHeader>
       </BlockHeader>
     </>
   );
 }
 
-export default SignupPage;
+export default LoginPage;

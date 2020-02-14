@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import * as R from 'ramda';
 import Header from '../components/Header';
 import Main from '../components/Main';
 import styled from 'styled-components';
@@ -422,7 +423,7 @@ const SwipeButtonRight = styled.button`
   }
 `;
 
-const Swipe = ({ dialogs }) => {
+const SwipeBox = ({ dialogs }) => {
   const maxIndex = useMemo(() => dialogs.length, [dialogs]);
   const [dialogIndex, setDialogIndex] = useState(0);
 
@@ -458,35 +459,6 @@ const Swipe = ({ dialogs }) => {
   );
 };
 
-{
-  /* Large show box - for button operation */
-}
-
-const LargeShowBox = () => {
-  const onClickLeft = e => {
-    console.log('click left');
-  };
-
-  const onClickRight = e => {
-    console.log('click right');
-  };
-
-  return (
-    <ShowBox>
-      <SwipeButtonLeft onClick={onClickLeft}>
-        <img src={require('../icons/before.png')} />
-      </SwipeButtonLeft>
-      <SwipeButtonRight onClick={onClickRight}>
-        <img src={require('../icons/next.png')} />
-      </SwipeButtonRight>
-      <Swipe />
-    </ShowBox>
-  );
-};
-
-{
-  /* Rendering at DOM */
-}
 const LogsPage = props => {
   const dispatch = useDispatch();
   const dialogs = useSelector(state => state.dialogs);
@@ -498,7 +470,7 @@ const LogsPage = props => {
   }, []);
 
   useEffect(() => {
-    setLocalDialogs(dialogs);
+    setLocalDialogs(R.reverse(dialogs));
   }, [dialogs]);
 
   return (
@@ -514,7 +486,7 @@ const LogsPage = props => {
             <CalendarModal />
           </SearchBox>
           <ShowBox>
-            <Swipe dialogs={localDialogs} />
+            <SwipeBox dialogs={localDialogs} />
           </ShowBox>
         </WholeBox>
       </Main>
