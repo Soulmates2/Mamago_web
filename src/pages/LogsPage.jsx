@@ -7,12 +7,15 @@ import { virtualize, bindKeyboard } from 'react-swipeable-views-utils';
 import Calendar from 'react-calendar';
 import '../font.css';
 
+
+const moment = require('moment');
+
 {
   /* Data List from server */
 }
-const logs = [
+const logs_backup = [
   {
-    id: '1',
+    id: '0',
     created_at: '2020-02-05',
     feedback: true,
     question: 'What are you doing now?',
@@ -23,7 +26,7 @@ const logs = [
     user_intention_translated: 'false'
   },
   {
-    id: '2',
+    id: '1',
     created_at: '2020-02-13',
     feedback: false,
     question: 'What are your favorite musics? And Why?',
@@ -34,7 +37,7 @@ const logs = [
     user_intention_translated: 'false'
   },
   {
-    id: '3',
+    id: '2',
     created_at: '2020-02-14',
     feedback: true,
     question: 'What are your favorite musics? And Why?',
@@ -46,6 +49,8 @@ const logs = [
   }
 ];
 
+
+let logs = Array.prototype.slice.call(logs_backup);
 
 { /* tag + style components */ }
 
@@ -153,9 +158,6 @@ const CloseWrapper = styled.div`
 `;
 
 
-const moment = require('moment');
-
-
 const ClockButton = props => {
   // Modal
   const [state, setState] = useState(false);
@@ -166,6 +168,8 @@ const ClockButton = props => {
 
     setState(prevState => !prevState);
     console.log(state);
+    logs = logs_backup;
+    console.log(logs);
   };
 
   const onClickClose = (e) => {
@@ -193,6 +197,29 @@ const ClockButton = props => {
   const onClickSelect = () => {
     console.log('close and date print')
 
+    let date_temp = [];
+    for(let j = 0; j < logs.length; j++){
+      const date_log = logs[j].created_at;
+      const date_search = day;
+
+      const first = moment(date_log).format("YYYY MM DD");
+      const second = moment(date_search).format("YYYY MM DD");
+
+      console.log(first);
+      console.log(second);
+
+      if (first === second){
+        console.log("same")
+        date_temp.push(logs[j]);
+        console.log(date_temp.length);
+        console.log(date_temp);
+      }
+    }
+
+
+    logs = date_temp;
+    console.log("this is changed log !!");
+    console.log(logs);
     setState(prevState => !prevState);
     console.log(day);
   }
@@ -557,6 +584,8 @@ const Swipe = () => {
   }
 
   const RightNotShow = () => {
+    console.log("why left is showing");
+    console.log(logs.length - 1);
     if(state !== logs.length - 1) {
       return(
         <SwipeButtonRight onClick={onClickRight}>
