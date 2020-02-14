@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Header from '../components/Header';
 import Main from '../components/Main';
 import '../font.css';
+import { useHistory } from 'react-router';
 
 const Text = styled.div`
   max-width: 100%;
@@ -12,7 +13,7 @@ const Text = styled.div`
   padding: 2px;
   font-weight: bold;
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-`
+`;
 
 const Image = styled.img`
   border: none;
@@ -23,9 +24,9 @@ const Image = styled.img`
   margin-left: auto;
   margin-right: auto;
   margin-top: 3px;
-`
+`;
 
-const Talk = styled.div`
+const Talk = styled.button`
   position: fixed;
   width: 50%;
   height: 3rem;
@@ -36,10 +37,11 @@ const Talk = styled.div`
   font-weight: bold;
   bottom: 0;
   left: 0;
-  background-color: #3DC728;
-`
+  background-color: #3dc728;
+  z-index: 999;
+`;
 
-const PastLog = styled.div`
+const PastLog = styled.button`
   position: fixed;
   width: 50%;
   height: 3rem;
@@ -50,11 +52,13 @@ const PastLog = styled.div`
   font-weight: bold;
   bottom: 0;
   right: 0;
-  background-color: #5D90F5;
-`
-
+  background-color: #5d90f5;
+  z-index: 999;
+`;
 
 const IntroPage = props => {
+  const history = useHistory();
+
   return (
     <>
       <Header />
@@ -65,7 +69,14 @@ const IntroPage = props => {
         <Text>영어 실력을 키워요!</Text>
         <Image src={require('../images/mamago_logo.png')}></Image>
       </Main>
-      <Talk>대화하기</Talk>
+      <Talk
+        onClick={e => {
+          e.preventDefault();
+          history.push('/tempchat');
+        }}
+      >
+        대화하기
+      </Talk>
       <PastLog>지난 기록</PastLog>
     </>
   );

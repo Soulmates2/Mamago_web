@@ -9,7 +9,7 @@ import Header from '../components/Header';
 import Main from '../components/Main';
 import Template from '../components/Template';
 import { ADD_CHAT, SET_CHATS, SET_DIALOG } from '../types';
-import { fetchUserDialogs } from '../actions/dialogs';
+import { fetchUserDialogs, createDialog, updateDialog } from '../actions/dialogs';
 import { buildChats } from '../services/util';
 
 import TempChatting from '../empty_pages/ChattingPage';
@@ -47,7 +47,7 @@ const MessageContainer = styled.div`
   outline: 1px solid black;
 
   overflow: scroll;
-  scrollTo: height;
+  scrollto: height;
 `;
 
 const ChatBox = styled.ul`
@@ -57,13 +57,13 @@ const ChatBox = styled.ul`
 `;
 
 const BubbleLeft = styled.div`
-  position:relative;
+  position: relative;
   max-width: 60%;
   padding: 0.5rem 1rem;
   color: black;
   border-radius: 30px;
   font-size: 0.8rem;
-  
+
   margin-top: 10px;
   margin-left: 1rem;
   // margin-right: 6rem;
@@ -71,18 +71,18 @@ const BubbleLeft = styled.div`
   z-index: 2;
 
   :after {
-    content: "";
+    content: '';
     position: absolute;
     border-style: solid;
     /* reduce the damage in FF3.0 */
-    display:block;
+    display: block;
     width: 0;
 
     top: 1rem;
     left: -1.3rem; /* value = - border-left-width - border-right-width */
-    bottom:auto;
+    bottom: auto;
     border-width: 1rem 3rem 0 0; /* vary these values to change the angle of the vertex */
-    border-color:transparent #d1c4e9;
+    border-color: transparent #d1c4e9;
     z-index: -1;
   }
 `;
@@ -102,20 +102,20 @@ const BubbleRight = styled.div`
   z-index: 2;
 
   :after {
-    content:"";
-    position:absolute;
-    border-style:solid;
+    content: '';
+    position: absolute;
+    border-style: solid;
 
     /* reduce the damage in FF3.0 */
-    display:block;
-    width:0;
-    
+    display: block;
+    width: 0;
+
     top: 1rem;
-    right:-1.3rem; /* value = - border-left-width - border-right-width */
+    right: -1.3rem; /* value = - border-left-width - border-right-width */
     bottom: auto;
     // left: auto;
     border-width: 1rem 0 0 3rem; /* vary these values to change the angle of the vertex */
-    border-color:transparent #ffd966;
+    border-color: transparent #ffd966;
     z-index: -1;
   }
 `;
@@ -151,7 +151,7 @@ const ReButton = styled.button`
   background: #ffd966;
   z-index: 3;
   font-size: 0.7rem;
-`
+`;
 
 const OtherButton = styled.button`
   position: absolute;
@@ -164,7 +164,7 @@ const OtherButton = styled.button`
   background: #ffd966;
   z-index: 3;
   font-size: 0.7rem;
-`
+`;
 
 const UserInput = styled.textarea`
   width: 90%;
@@ -175,7 +175,6 @@ const UserInput = styled.textarea`
   bottom: 0;
   font-size: 1rem;
 `;
-
 
 const SendButton = styled.button`
   vertical-align: middle;
@@ -190,7 +189,6 @@ const SendButton = styled.button`
   }
 `;
 
-
 const example = {
   id: '123124125',
   question: '안녕 오늘 하루는 어땠어?',
@@ -201,18 +199,15 @@ const example = {
   user_intention_translated: 'it was so tired day'
 };
 
-
-const Chat = ({chat}) => {
-  if (chat.type === "mamago") return <BubbleLeft>{chat.message}</BubbleLeft>;
-  if (chat.type === "user") return <BubbleRight>{chat.message}</BubbleRight>;
+const Chat = ({ chat }) => {
+  if (chat.type === 'mamago') return <BubbleLeft>{chat.message}</BubbleLeft>;
+  if (chat.type === 'user') return <BubbleRight>{chat.message}</BubbleRight>;
 };
 
 const ChatList = props => {
   const { children } = props;
   return <ChatBox>{children}</ChatBox>;
 };
-
-
 
 const STEP = {
   question: 0,
@@ -230,61 +225,82 @@ const ChattingPage = props => {
   const { t } = useTranslation();
 
   const dialog = useSelector(state => state.dialog);
+  const dialogs = useSelector(state => state.dialogs);
   const chats = useSelector(state => state.chats);
 
   const [message, setMessage] = useState('');
 
   const [step, setStep] = useState(STEP.original);
   useEffect(() => {
-    console.log('Check Step');
-    dispatch({
-      type: SET_CHATS,
-      payload: buildChats(dialog)
-    });
+    if (!R.isEmpty(dialog)) {
+      dispatch({
+        type: SET_CHATS,
+        payload: buildChats(dialog)
+      });
+    }
   }, [dialog]);
 
+  useEffect(() => {
+    dispatch(fetchUserDialogs());
+  }, []);
 
+  console.log(dialog, step);
+  useEffect(() => {
+    if (!R.isEmpty(dialog)) {
+      if (dialog.original) {
+        if (R.isNil(dialog.feedback)) {
+          setStep(STEP.feedback);
+        } else if (!dialog.feedback) {
+          setStep(STEP.user_intention_translated);
+        } else if (R.isNil(dialog.user_intention)) {
+          setStep(STEP.user_intention);
+        } else {
+          setStep(STEP.user_intention_translated);
+        }
+      }
+    }
+  }, [dialog]);
   const sendMessage = e => {
     e.preventDefault();
     if (!R.isEmpty(message)) {
       switch (step) {
-        // case STEP.question:
         case STEP.original:
-          dispatch({
-            type: SET_DIALOG,
-            payload: { ...dialog, original: message }
-          });
-          setStep(STEP.feedback);
+          dispatch(
+            updateDialog({
+              id: dialog.id,
+              original: message,
+              afterSuccess: () => setStep(STEP.feedback)
+            })
+          );
+
           break;
-        // case STEP.comprehended:
-        // case STEP.translated:
         case STEP.feedback:
           if (R.includes(message, ['네', '맞아', 'yes', 'Yes', 'ㅇㅇ', '응'])) {
-            dispatch({
-              type: SET_DIALOG,
-              payload: { ...dialog, feedback: false }
-            });
-            setStep(STEP.user_intention);
+            dispatch(
+              updateDialog({
+                id: dialog.id,
+                feedback: false,
+                afterSuccess: () => setStep(STEP.user_intention)
+              })
+            );
           } else if (R.includes(message, ['아니오', '아니', '아니야', 'no', 'No', 'ㄴㄴ'])) {
-            dispatch({
-              type: SET_DIALOG,
-              payload: { ...dialog, feedback: true }
-            });
-            setStep(STEP.user_intention);
-          } else {
-            chats.push({ type: "user", message: message});
-            chats.push({ type: "mamago", message: '"맞아" 또는 "아니"를 입력해줘!' });
-            setStep(STEP.feedback);
+            dispatch(
+              updateDialog({
+                id: dialog.id,
+                feedback: true,
+                afterSuccess: () => setStep(STEP.user_intention)
+              })
+            );
           }
-          
           break;
-
         case STEP.user_intention:
-          dispatch({
-            type: SET_DIALOG,
-            payload: { ...dialog, user_intention: message }
-          });
-          setStep(STEP.user_intention_translated);
+          dispatch(
+            updateDialog({
+              id: dialog.id,
+              user_intention: message,
+              afterSuccess: () => setStep(STEP.user_intention_translated)
+            })
+          );
           break;
         default:
           return;
@@ -293,47 +309,83 @@ const ChattingPage = props => {
     setMessage('');
   };
 
-
-  const CheckStep = ({value}) => {
-    console.log(value)
+  const CheckStep = ({ value }) => {
+    console.log(value);
     if (value === STEP.feedback) {
       return (
-      <span>
-        <YesButton onClick={e => {
-           dispatch({
-            type: SET_DIALOG,
-            payload: { ...dialog, feedback: false }
-          });
-          setStep(STEP.user_intention);
-        }}>맞아</YesButton>
-        <NoButton onClick={e => {
-           dispatch({
-            type: SET_DIALOG,
-            payload: { ...dialog, feedback: true }
-          });
-          setStep(STEP.user_intention);
-        }}>아니야</NoButton>
-      </span>
-      )
-    }
-    else if (value === STEP.user_intention_translated) {
-      return (
         <span>
-          <ReButton onClick = {e => {
-            history.push('/tempchat');
-        }}>이 질문으로 다시 할래요</ReButton>
-          <OtherButton>다른 질문으로 할래요</OtherButton>
+          <YesButton
+            onClick={e => {
+              dispatch(
+                updateDialog({
+                  id: dialog.id,
+                  feedback: false,
+                  afterSuccess: () => setStep(STEP.user_intention_translated)
+                })
+              );
+            }}
+          >
+            맞아
+          </YesButton>
+          <NoButton
+            onClick={e => {
+              dispatch(
+                updateDialog({
+                  id: dialog.id,
+                  feedback: true,
+                  afterSuccess: () => setStep(STEP.user_intention)
+                })
+              );
+            }}
+          >
+            아니야
+          </NoButton>
         </span>
       );
-    }
-    else {
+    } else if (value === STEP.user_intention_translated) {
+      return (
+        <span>
+          <ReButton
+            onClick={e => {
+              dispatch(
+                updateDialog({
+                  id: dialog.id,
+                  complete: true,
+                  afterSuccess: () => {
+                    dispatch(fetchUserDialogs());
+                    setStep(STEP.original);
+                  }
+                })
+              );
+            }}
+          >
+            이 질문으로 다시 할래요
+          </ReButton>
+          <OtherButton
+            onClick={e => {
+              dispatch(
+                updateDialog({
+                  id: dialog.id,
+                  complete: true,
+                  afterSuccess: () => {
+                    dispatch(fetchUserDialogs());
+                    setStep(STEP.original);
+                  }
+                })
+              );
+            }}
+          >
+            다른 질문으로 할래요
+          </OtherButton>
+        </span>
+      );
+    } else {
       return null;
     }
-  }
+  };
 
   const handleInput = e => {
     e.preventDefault();
-    // dispatch(fetchUserDialogs());
     setMessage(e.target.value);
   };
 
@@ -350,14 +402,19 @@ const ChattingPage = props => {
           <MessageContainer>
             <ChatList>
               {chats.map(c => (
-                <Chat chat={c}/>
+                <Chat chat={c} />
               ))}
             </ChatList>
             <CheckStep value={step}></CheckStep>
           </MessageContainer>
-          
+
           <span>
-            <UserInput placeholder="마마고와 대화를 시작하세요!" type="text" value={message} onInput={handleInput}></UserInput>
+            <UserInput
+              placeholder="마마고와 대화를 시작하세요!"
+              type="text"
+              value={message}
+              onInput={handleInput}
+            ></UserInput>
             <SendButton onClick={sendMessage}>
               <img src={require('../images/send.png')} />
             </SendButton>

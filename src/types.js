@@ -4,6 +4,7 @@ export const UPDATE_DIALOG = 'update_dialog';
 
 export const FETCH_DIALOGS = 'fetch_dialogs';
 export const SET_DIALOGS = 'set_dialogs';
+export const CREATE_DIALOG = 'create_dialog';
 export const CLEAR_DIALOGS = 'clear_dialogs';
 
 export const LOGIN_USER = 'login_user';

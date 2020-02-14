@@ -21,7 +21,7 @@ export const dialogs = (state = [], { type, payload }) => {
   }
 };
 
-export const dialog = (state = example, { type, payload }) => {
+export const dialog = (state = {}, { type, payload }) => {
   switch (type) {
     case SET_DIALOG:
       return payload;
