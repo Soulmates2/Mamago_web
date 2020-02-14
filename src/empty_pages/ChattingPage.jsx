@@ -50,21 +50,22 @@ const MessageContainer = styled.div`
 const ChatBox = styled.ul`
   list-style: none;
   padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
 `;
 
 const BubbleLeft = styled.div`
   position:relative;
+  max-width: 60%;
   padding: 0.5rem 1rem;
   color: black;
   border-radius: 30px;
+  font-size: 0.8rem;
   
   margin-top: 10px;
   margin-left: 1rem;
-  margin-right: 6rem;
+  // margin-right: 6rem;
   background: #d1c4e9;
   z-index: 2;
-
-  font-size: 1rem;
 
   :after {
     content: "";
@@ -77,22 +78,25 @@ const BubbleLeft = styled.div`
     top: 1rem;
     left: -1.3rem; /* value = - border-left-width - border-right-width */
     bottom:auto;
-    border-width: 1rem 1.5rem 0 0; /* vary these values to change the angle of the vertex */
+    border-width: 1rem 3rem 0 0; /* vary these values to change the angle of the vertex */
     border-color:transparent #d1c4e9;
-    z-index: 1;
+    z-index: -1;
   }
 `;
 
 const BubbleRight = styled.div`
   position: relative;
+  max-width: 60%;
   padding: 0.5rem 1rem;
   color: black;
   border-radius: 30px;
+  font-size: 0.8rem;
 
   margin-top: 10px;
   margin-right: 1rem;
   margin-left: 6rem;
   background: #ffd966;
+  z-index: 2;
 
   :after {
     content:"";
@@ -106,9 +110,10 @@ const BubbleRight = styled.div`
     top: 1rem;
     right:-1.3rem; /* value = - border-left-width - border-right-width */
     bottom: auto;
-    left: auto;
-    border-width: 1rem 0 0 1.5rem; /* vary these values to change the angle of the vertex */
-    border-color:transparent #ffd966 ;
+    // left: auto;
+    border-width: 1rem 0 0 3rem; /* vary these values to change the angle of the vertex */
+    border-color:transparent #ffd966;
+    z-index: -1;
   }
 `;
 
@@ -248,19 +253,26 @@ const ChattingPage = props => {
         // case STEP.comprehended:
         // case STEP.translated:
         case STEP.feedback:
-          if (R.includes(message, ['맞아', 'yes', 'ㅇㅇ', '응'])) {
-            dispatch({
-              type: SET_DIALOG,
-              payload: { ...dialog, feedback: true }
-            });
-          } else {
+          if (R.includes(message, ['네', '맞아', 'yes', 'Yes', 'ㅇㅇ', '응'])) {
             dispatch({
               type: SET_DIALOG,
               payload: { ...dialog, feedback: false }
             });
+            setStep(STEP.user_intention);
+          } else if (R.includes(message, ['아니오', '아니', '아니야', 'no', 'No', 'ㄴㄴ'])) {
+            dispatch({
+              type: SET_DIALOG,
+              payload: { ...dialog, feedback: false }
+            });
+            setStep(STEP.user_intention);
+          } else {
+            chats.push({ type: "user", message: message});
+            chats.push({ type: "mamago", message: '"맞아" 또는 "아니"를 입력해줘!' });
+            setStep(STEP.feedback);
           }
-          setStep(STEP.user_intention);
+          
           break;
+
         case STEP.user_intention:
           dispatch({
             type: SET_DIALOG,
@@ -281,8 +293,20 @@ const ChattingPage = props => {
     if (value === STEP.feedback) {
       return (
       <span>
-        <YesButton onClick={setMessage("맞아"), sendMessage}>맞아</YesButton>
-        <NoButton onClick={setMessage("아니야"), sendMessage}>아니야</NoButton>
+        <YesButton onClick={e => {
+           dispatch({
+            type: SET_DIALOG,
+            payload: { ...dialog, feedback: false }
+          });
+          setStep(STEP.user_intention);
+        }}>맞아</YesButton>
+        <NoButton onClick={e => {
+           dispatch({
+            type: SET_DIALOG,
+            payload: { ...dialog, feedback: true }
+          });
+          setStep(STEP.user_intention);
+        }}>아니야</NoButton>
       </span>
       )
     }
@@ -304,17 +328,6 @@ const ChattingPage = props => {
     // dispatch(fetchUserDialogs());
     setMessage(e.target.value);
   };
-
-  const YesInput = e => {
-    e.preventDefault();
-    setMessage("맞아");
-  }
-
-  const NoInput = e => {
-    e.preventDefault();
-    setMessage("아니야");
-  }
-
 
   return (
     <Template>
