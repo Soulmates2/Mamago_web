@@ -36,7 +36,7 @@ const Image = styled.img`
 `;
 
 const MessageContainer = styled.div`
-  width: 340px;
+  width: 100%;
   height: 400px;
   min-width: 340px;
   min-height: 400px;
@@ -134,6 +134,7 @@ const NoButton = styled.button`
 
 const ReButton = styled.button`
   position: absolute;
+  max-width: 45%;
   padding: 0.5rem 1rem;
   color: black;
   border-radius: 30px;
@@ -145,6 +146,7 @@ const ReButton = styled.button`
 
 const OtherButton = styled.button`
   position: absolute;
+  max-width: 45%;
   padding: 0.5rem 1rem;
   color: black;
   border-radius: 30px;
@@ -200,28 +202,7 @@ const ChatList = props => {
   return <ChatBox>{children}</ChatBox>;
 };
 
-const CheckStep = ({value}) => {
-  console.log(value)
-  if (value === STEP.feedback) {
-    return (
-    <span>
-      <YesButton>맞아</YesButton>
-      <NoButton>아니야</NoButton>
-    </span>
-    )
-  }
-  else if (value === STEP.user_intention_translated) {
-    return (
-      <span>
-        <ReButton>이 질문으로 다시 할래요</ReButton>
-        <OtherButton>다른 질문으로 할래요</OtherButton>
-      </span>
-    );
-  }
-  else {
-    return null;
-  }
-}
+
 
 const STEP = {
   question: 0,
@@ -232,6 +213,7 @@ const STEP = {
   user_intention: 5,
   user_intention_translated: 6
 };
+
 const ChattingPage = props => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -243,12 +225,14 @@ const ChattingPage = props => {
 
   const [step, setStep] = useState(STEP.original);
   useEffect(() => {
-    console.log('얍');
+    console.log('Check Step');
     dispatch({
       type: SET_CHATS,
       payload: buildChats(dialog)
     });
   }, [dialog]);
+
+
   const sendMessage = e => {
     e.preventDefault();
     if (!R.isEmpty(message)) {
@@ -291,11 +275,46 @@ const ChattingPage = props => {
     setMessage('');
   };
 
+
+  const CheckStep = ({value}) => {
+    console.log(value)
+    if (value === STEP.feedback) {
+      return (
+      <span>
+        <YesButton onClick={setMessage("맞아"), sendMessage}>맞아</YesButton>
+        <NoButton onClick={setMessage("아니야"), sendMessage}>아니야</NoButton>
+      </span>
+      )
+    }
+    else if (value === STEP.user_intention_translated) {
+      return (
+        <span>
+          <ReButton>이 질문으로 다시 할래요</ReButton>
+          <OtherButton>다른 질문으로 할래요</OtherButton>
+        </span>
+      );
+    }
+    else {
+      return null;
+    }
+  }
+
   const handleInput = e => {
     e.preventDefault();
     // dispatch(fetchUserDialogs());
     setMessage(e.target.value);
   };
+
+  const YesInput = e => {
+    e.preventDefault();
+    setMessage("맞아");
+  }
+
+  const NoInput = e => {
+    e.preventDefault();
+    setMessage("아니야");
+  }
+
 
   return (
     <Template>
