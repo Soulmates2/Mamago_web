@@ -7,11 +7,9 @@ import { API_ADDR } from './common';
 
 import LoginPage from './pages/LoginPage';
 import IntroPage from './pages/IntroPage';
-import TempChatting from './empty_pages/ChattingPage';
 import ChattingPage from './pages/ChattingPage';
 import LogsPage from './pages/LogsPage';
-import UserChattingPage from './pages/UserChattingPage';
-import UserLogsPage from './pages/UserLogsPage';
+import SignupPage from './pages/SignupPage';
 
 const history = createBrowserHistory();
 
@@ -38,10 +36,10 @@ const App = () => {
       <ScrollToTop>
         <Suspense fallback="loading">
           <Switch>
-            <CookieAuthenticatedRoute exact path="/tempchat" component={TempChatting} />
-            <Route exact path="/chat" component={ChattingPage} />
+            <CookieAuthenticatedRoute exact path="/chat" component={ChattingPage} />
             <CookieAuthenticatedRoute exact path="/logs" component={LogsPage} />
             <Route exact path="/login" component={LoginPage} />
+            <Route exact path="/signup" component={SignupPage} />
             <Route exact path="/" component={IntroPage} />
           </Switch>
         </Suspense>

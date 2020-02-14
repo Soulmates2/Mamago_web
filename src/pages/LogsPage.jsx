@@ -303,7 +303,6 @@ const LogShowBlock = styled.div`
 {
   /* Swipe */
 }
-const BindKey = bindKeyboard(SwipeableViews);
 const VirtualizeSwipeableViews = virtualize(SwipeableViews);
 
 const PageStyle = styled.div`

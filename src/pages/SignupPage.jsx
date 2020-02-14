@@ -58,6 +58,7 @@ function SignupPage(props) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
 
   const onChange = type => e => {
     e.preventDefault();
@@ -66,6 +67,8 @@ function SignupPage(props) {
         return setEmail(e.target.value);
       case 'password':
         return setPassword(e.target.value);
+      case 'passwordConfirmation':
+        return setPasswordConfirmation(e.target.value);
       default:
         return;
     }
@@ -74,15 +77,19 @@ function SignupPage(props) {
   const onClick = e => {
     e.preventDefault();
     if (validateEmail(email) && validatePassword(password)) {
-      dispatch(
-        login({
-          email: email,
-          password: password,
-          afterSuccess: () => {
-            history.push('/');
-          }
-        })
-      );
+      if (password === passwordConfirmation) {
+        dispatch(
+          signup({
+            email: email,
+            password: password,
+            afterSuccess: () => {
+              history.push('/');
+            }
+          })
+        );
+      } else {
+        alert('패스워드가 다릅니다.');
+      }
     }
   };
 
@@ -107,7 +114,13 @@ function SignupPage(props) {
           value={password}
           type="password"
         />
-
+        <LoginInput
+          name="password"
+          placeholder="비밀번호 확인"
+          onChange={onChange('passwordConfirmation')}
+          value={passwordConfirmation}
+          type="password"
+        />
         <div>
           <ButtonHeader onClick={onClick}>가입하기</ButtonHeader>
         </div>
