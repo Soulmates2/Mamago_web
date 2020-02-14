@@ -72,7 +72,7 @@ const IntroPage = props => {
       <Talk
         onClick={e => {
           e.preventDefault();
-          history.push('/tempchat');
+          history.push('/chat');
         }}
       >
         대화하기
