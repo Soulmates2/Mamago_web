@@ -118,11 +118,6 @@ function LoginPage(props) {
           <ButtonHeader onClick={onClick}>로그인</ButtonHeader>
         </div>
       </BlockHeader>
-
-      <div>
-        <b>value: </b>
-        {email} ({password})
-      </div>
     </>
   );
 }

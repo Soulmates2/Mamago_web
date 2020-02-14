@@ -77,7 +77,14 @@ const IntroPage = props => {
       >
         대화하기
       </Talk>
-      <PastLog>지난 기록</PastLog>
+      <PastLog
+        onClick={e => {
+          e.preventDefault();
+          history.push('/logs');
+        }}
+      >
+        지난 기록
+      </PastLog>
     </>
   );
 };
