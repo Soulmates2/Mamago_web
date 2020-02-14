@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import * as R from 'ramda';
@@ -10,6 +11,8 @@ import Template from '../components/Template';
 import { ADD_CHAT, SET_CHATS, SET_DIALOG } from '../types';
 import { fetchUserDialogs } from '../actions/dialogs';
 import { buildChats } from '../services/util';
+
+import TempChatting from '../empty_pages/ChattingPage';
 
 const Block = styled.div`
   position: absolute;
@@ -139,14 +142,15 @@ const NoButton = styled.button`
 
 const ReButton = styled.button`
   position: absolute;
-  max-width: 45%;
+  max-width: 55%;
   padding: 0.5rem 1rem;
   color: black;
   border-radius: 30px;
-  left: 5px;
+  right: 150px;
   bottom: 70px;
   background: #ffd966;
   z-index: 3;
+  font-size: 0.7rem;
 `
 
 const OtherButton = styled.button`
@@ -155,10 +159,11 @@ const OtherButton = styled.button`
   padding: 0.5rem 1rem;
   color: black;
   border-radius: 30px;
-  left: 105px;
+  right: 5px;
   bottom: 70px;
   background: #ffd966;
   z-index: 3;
+  font-size: 0.7rem;
 `
 
 const UserInput = styled.textarea`
@@ -220,6 +225,7 @@ const STEP = {
 };
 
 const ChattingPage = props => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -262,7 +268,7 @@ const ChattingPage = props => {
           } else if (R.includes(message, ['아니오', '아니', '아니야', 'no', 'No', 'ㄴㄴ'])) {
             dispatch({
               type: SET_DIALOG,
-              payload: { ...dialog, feedback: false }
+              payload: { ...dialog, feedback: true }
             });
             setStep(STEP.user_intention);
           } else {
@@ -313,7 +319,9 @@ const ChattingPage = props => {
     else if (value === STEP.user_intention_translated) {
       return (
         <span>
-          <ReButton>이 질문으로 다시 할래요</ReButton>
+          <ReButton onClick = {e => {
+            history.push('/tempchat');
+        }}>이 질문으로 다시 할래요</ReButton>
           <OtherButton>다른 질문으로 할래요</OtherButton>
         </span>
       );

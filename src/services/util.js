@@ -50,7 +50,7 @@ export const buildChats = dialog => {
   }
 
   if (!R.isNil(feedback)) {
-    if (feedback) {
+    if (!feedback) {
       chats.push({ type: "user", message: '맞아' });
       chats.push({ type: "mamago", message: '잘했어!' });
       return chats;
