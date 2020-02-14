@@ -6,6 +6,7 @@ export const FETCH_DIALOGS = 'fetch_dialogs';
 export const SET_DIALOGS = 'set_dialogs';
 export const CLEAR_DIALOGS = 'clear_dialogs';
 
+export const LOGIN_USER = 'login_user';
 export const FETCH_USER = 'fetch_user';
 export const SET_USER = 'set_user';
 export const UNSET_USER = 'unset_user';
