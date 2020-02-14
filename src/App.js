@@ -1,5 +1,5 @@
 import React, { Component, useEffect, Suspense, useContext } from 'react';
-import { Router, Route, Switch, withRouter } from 'react-router-dom';
+import { Router, Route, Switch, withRouter, useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { createBrowserHistory } from 'history';
 import * as R from 'ramda';
@@ -13,7 +13,6 @@ import LogsPage from './pages/LogsPage';
 import UserChattingPage from './pages/UserChattingPage';
 import UserLogsPage from './pages/UserLogsPage';
 
-
 const history = createBrowserHistory();
 
 const ScrollToTop = withRouter(({ children, location: { pathname } }) => {
@@ -25,8 +24,11 @@ const ScrollToTop = withRouter(({ children, location: { pathname } }) => {
 });
 
 const CookieAuthenticatedRoute = ({ component: Component, ...rest }) => {
+  const h = useHistory();
   const cookie_access_token = Cookies.get('access_token');
-  // if (R.isNil(cookie_access_token)) return <Login />;
+  if (R.isNil(cookie_access_token)) {
+    h.push('/login');
+  }
   return <Route {...rest} component={Component} />;
 };
 
@@ -36,11 +38,9 @@ const App = () => {
       <ScrollToTop>
         <Suspense fallback="loading">
           <Switch>
-            <Route exact path="/tempchat" component={TempChatting}/>
+            <CookieAuthenticatedRoute exact path="/tempchat" component={TempChatting} />
             <Route exact path="/chat" component={ChattingPage} />
-            <Route exact path="/me/chat" component={UserChattingPage} />
-            <Route exact path="/logs" component={LogsPage} />
-            <Route exact path="/me/logs" component={UserLogsPage} />
+            <CookieAuthenticatedRoute exact path="/logs" component={LogsPage} />
             <Route exact path="/login" component={LoginPage} />
             <Route exact path="/" component={IntroPage} />
           </Switch>

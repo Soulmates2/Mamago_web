@@ -55,7 +55,7 @@ export const login = ({ email, password, afterSuccess }) => {
           type: UNSET_FETCH,
           payload: LOGIN_USER
         });
-        if (typeof afterSuccess === 'funtcion') afterSuccess();
+        if (typeof afterSuccess === 'function') afterSuccess();
       })
       .catch(e => {
         const message = e.message;

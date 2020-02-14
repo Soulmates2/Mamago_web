@@ -64,12 +64,6 @@ function LoginPage(props) {
 
   const { email, password } = inputs;
 
-  useEffect(() => {
-    if (!R.isNil(access_token) && !R.isEmpty(access_token)) {
-      history.push('/');
-    }
-  }, [access_token]);
-
   const onChange = e => {
     const { value, name } = e.target;
     setInputs({
@@ -81,7 +75,15 @@ function LoginPage(props) {
   const onClick = e => {
     e.preventDefault();
     if (validateEmail(email) && validatePassword(password)) {
-      dispatch(login({ email: email, password: password, afterSuccess: () => history.push('/') }));
+      dispatch(
+        login({
+          email: email,
+          password: password,
+          afterSuccess: () => {
+            history.push('/');
+          }
+        })
+      );
       setInputs({
         email: '',
         password: ''
