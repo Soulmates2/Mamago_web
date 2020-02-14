@@ -1,3 +1,6 @@
 export default {
-  test: 'Test'
+  comp_prefix: '',
+  comp_postfix: '',
+  trans_prefix: '',
+  trans_postfix: ''
 };
