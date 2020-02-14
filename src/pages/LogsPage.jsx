@@ -7,6 +7,9 @@ import { virtualize, bindKeyboard } from 'react-swipeable-views-utils';
 import Calendar from 'react-calendar';
 import '../font.css';
 
+const axios = require('axios');
+
+
 
 const moment = require('moment');
 
@@ -14,43 +17,44 @@ const moment = require('moment');
   /* Data List from server */
 }
 const logs_backup = [
+
   {
-    id: '0',
+    id: '1',
     created_at: '2020-02-05',
     feedback: true,
     question: 'What are you doing now?',
     original: 'I ate milk-tea. It was so delicious.',
-    translated: '피드백 트루',
-    comprehanded: 'true',
-    user_intention: '피드백 펄스',
-    user_intention_translated: 'false'
+    translated: '나는 밀크티를 먹었다. 매우 맛있었다.',
+    comprehanded: 'I ate milk-tea. It was so delicious.',
+    user_intention: 'I ate milk-tea. It was so delicious.',
+    user_intention_translated: '나는 밀크티를 먹었다. 매우 맛있었다.'
   },
   {
-    id: '1',
+    id: '2',
     created_at: '2020-02-13',
     feedback: false,
     question: 'What are your favorite musics? And Why?',
     original: 'I like ambition music. There music is so emphathsis.',
-    translated: '피드백 트루',
-    comprehanded: 'true',
-    user_intention: '피드백 펄스',
-    user_intention_translated: 'false'
+    translated: '나는 엠비션 뮤직을 좋아한다. 그들의 음악은 매우 공감된다.',
+    comprehanded: 'I ate milk-tea. It was so delicious.',
+    user_intention: 'I like ambition music. There music is so emphathsis.',
+    user_intention_translated: '나는 엠비션 뮤직을 좋아한다. 그들의 음악은 매우 공감된다.'
   },
   {
-    id: '2',
+    id: '3',
     created_at: '2020-02-14',
     feedback: true,
     question: 'What are your favorite musics? And Why?',
     original: 'I like ambition music. There music is so emphathsis.',
-    translated: '피드백 트루',
-    comprehanded: 'true',
-    user_intention: '피드백 펄스',
-    user_intention_translated: 'false'
+    translated: '나는 엠비션 뮤직을 좋아한다. 그들의 음악은 매우 공감된다.',
+    comprehanded: 'I ate milk-tea. It was so delicious.',
+    user_intention: 'I like ambition music. There music is so emphathsis.',
+    user_intention_translated: '나는 엠비션 뮤직을 좋아한다. 그들의 음악은 매우 공감된다.'
   }
 ];
 
 
-let logs = Array.prototype.slice.call(logs_backup);
+// let logs = Array.prototype.slice.call(logs_backup);
 
 { /* tag + style components */ }
 
@@ -158,187 +162,171 @@ const CloseWrapper = styled.div`
 `;
 
 
-const ClockButton = props => {
-  // Modal
-  const [state, setState] = useState(false);
+// const ClockButton = props => {
+//   // Modal
+//   const [state, setState] = useState(false);
 
-  const onClickOpen = e => {
-    e.preventDefault();
-    console.log('open');
+//   const onClickOpen = e => {
+//     e.preventDefault();
 
-    setState(prevState => !prevState);
-    console.log(state);
-    logs = logs_backup;
-    console.log(logs);
-  };
+//     setState(prevState => !prevState);
+//     logs = logs_backup;
+//   };
 
-  const onClickClose = (e) => {
-    e.preventDefault();
-    console.log('close');
+//   const onClickClose = (e) => {
+//     e.preventDefault();
 
-    setState(prevState => !prevState);
-    console.log(state);
-  };
+//     setState(prevState => !prevState);
+//   };
 
 
-  // Calender
+//   // Calender
 
-  const [day, setDay] = useState(new Date());
+//   const [day, setDay] = useState(new Date());
 
-  //setter : value or function
-  // function = (prev) => {}
-  const onDateChange = (date) => {
-    // setState({ date: moment(date).format('YYYY-MM-DD') })
-    // console.log(date);
-    setDay(date);
-    console.log(day);
-  };
+//   //setter : value or function
+//   // function = (prev) => {}
+//   const onDateChange = (date) => {
+//     // setState({ date: moment(date).format('YYYY-MM-DD') })
+//     setDay(date);
+//   };
 
-  const onClickSelect = () => {
-    console.log('close and date print')
+//   const onClickSelect = () => {
 
-    let date_temp = [];
-    for(let j = 0; j < logs.length; j++){
-      const date_log = logs[j].created_at;
-      const date_search = day;
+//     let date_temp = [];
+//     for(let j = 0; j < logs.length; j++){
+//       const date_log = logs[j].created_at;
+//       const date_search = day;
 
-      const first = moment(date_log).format("YYYY MM DD");
-      const second = moment(date_search).format("YYYY MM DD");
-
-      console.log(first);
-      console.log(second);
-
-      if (first === second){
-        console.log("same")
-        date_temp.push(logs[j]);
-        console.log(date_temp.length);
-        console.log(date_temp);
-      }
-    }
+//       const first = moment(date_log).format("YYYY MM DD");
+//       const second = moment(date_search).format("YYYY MM DD");
 
 
-    logs = date_temp;
-    console.log("this is changed log !!");
-    console.log(logs);
-    setState(prevState => !prevState);
-    console.log(day);
-  }
+//       if (first === second){
+//         date_temp.push(logs[j]);
+//       }
+//     }
 
-  const CalendarClose = styled.button`
-    background-color: #808080;
-    border: none;
-    color: white;
-    padding: 0.5rem;
-    text-align: center;
-    text-decoraton: none;
-    display: inline-block;
-    font-size: 1rem;
-    margin: 0.3rem;
-  `
 
-  const CalendarSelect = styled.button`
-    background-color: #808080;
-    border: none;
-    color: white;
-    padding: 0.5rem;
-    text-align: center;
-    text-decoraton: none;
-    display: inline-block;
-    font-size: 1rem;
-    margin: 0.3rem;
-  `
+//     logs = date_temp;
+//     setState(prevState => !prevState);
+//   }
 
-  return (
-    <>
-      <ClockButtons type="button" onClick={onClickOpen}>
-        <img src={require('../icons/clock.png')} />
-      </ClockButtons>
-      <ModalWapper display={state}>
-        <Modal>
-          <ModalTitle>타임머신</ModalTitle>
-          <Calendar onChange={onDateChange} value={day} />
-          <CloseWrapper>
-            <CalendarClose onClick={onClickClose}>취소</CalendarClose>
-            <CalendarSelect onClick={onClickSelect}>선택</CalendarSelect>
-            {/* <b>value: {day}</b> */}
-          </CloseWrapper>
-        </Modal>
-      </ModalWapper>
-    </>
-  );
-};
+//   const CalendarClose = styled.button`
+//     background-color: #808080;
+//     border: none;
+//     color: white;
+//     padding: 0.5rem;
+//     text-align: center;
+//     text-decoraton: none;
+//     display: inline-block;
+//     font-size: 1rem;
+//     margin: 0.3rem;
+//   `
+
+//   const CalendarSelect = styled.button`
+//     background-color: #808080;
+//     border: none;
+//     color: white;
+//     padding: 0.5rem;
+//     text-align: center;
+//     text-decoraton: none;
+//     display: inline-block;
+//     font-size: 1rem;
+//     margin: 0.3rem;
+//   `
+
+//   return (
+//     <>
+//       <ClockButtons type="button" onClick={onClickOpen}>
+//         <img src={require('../icons/clock.png')} />
+//       </ClockButtons>
+//       <ModalWapper display={state}>
+//         <Modal>
+//           <ModalTitle>타임머신</ModalTitle>
+//           <Calendar onChange={onDateChange} value={day} />
+//           <CloseWrapper>
+//             <CalendarClose onClick={onClickClose}>취소</CalendarClose>
+//             <CalendarSelect onClick={onClickSelect}>선택</CalendarSelect>
+//             {/* <b>value: {day}</b> */}
+//           </CloseWrapper>
+//         </Modal>
+//       </ModalWapper>
+//     </>
+//   );
+// };
 
 { /* Parsing Databaset datasets and Showing */ }
 
-function User({ user }) {
-  let output = '';
-  let output_trans = '';
-  if (user.feedback) {
-    output = user.comprehanded;
-    output_trans = user.translated;
-  }
-  else{
-    output = user.user_intention_translated;
-    output_trans = user.user_intention;
-  };
+// function User({ user }) {
+//   let output = '';
+//   let output_trans = '';
+//   if (user.feedback) {
+//     output = user.comprehanded;
+//     output_trans = user.translated;
+//   }
+//   else{
+//     output = user.user_intention_translated;
+//     output_trans = user.user_intention;
+//   };
 
-  return (
-    <>
-      <PageStyle>
-        <ReturnDate value={user.created_at} />
-        <LogShowBlock>
-          <BubbleLeft>
-            <ReturnSubject value={user.question}/>
-          </BubbleLeft>
-        </LogShowBlock>        
-        <LogShowBlock>
-          <BubbleRight>
-            <ReturnInput value={user.original} />
-            <ReturnUserIntend value={user.translated} />
-          </BubbleRight>
-        </LogShowBlock>
-        <LogShowBlock>
-          <BubbleLeft>
-            <ReturnOutput value={output} />
-            <ReturnUserIntendTrans value={output_trans} />
-          </BubbleLeft>
-        </LogShowBlock>
-      </PageStyle>
-    </>
-  );
-}
+//   return (
+//     <>
+//       <PageStyle>
+//         <ReturnDate value={user.created_at} />
+//         <LogShowBlock>
+//           <BubbleLeft>
+//             <ReturnSubject value={user.question}/>
+//           </BubbleLeft>
+//         </LogShowBlock>        
+//         <LogShowBlock>
+//           <BubbleRight>
+//             <ReturnInput value={user.original} />
+//             <ReturnUserIntend value={user.translated} />
+//           </BubbleRight>
+//         </LogShowBlock>
+//         <LogShowBlock>
+//           <BubbleLeft>
+//             <ReturnOutput value={output} />
+//             <ReturnUserIntendTrans value={output_trans} />
+//           </BubbleLeft>
+//         </LogShowBlock>
+//       </PageStyle>
+//     </>
+//   );
+// }
 
-function slideRenderer(params) {
-  const{index, key} = params;
-  let temp = [];
+// function slideRenderer(params) {
+//   const{index, key} = params;
+//   let temp = [];
 
-  for (let i = 0; i < index + 1; i++) {
-    temp = [logs[i]];
-  }
+//   for (let i = 0; i < index + 1; i++) {
+//     temp = [logs[i]];
+//   }
 
-  // const SeparateList = () => 
-  //   temp.map(o => (<div key={key}>
-  //     {o}
-  //   </div>));
+//   // const SeparateList = () => 
+//   //   temp.map(o => (<div key={key}>
+//   //     {o}
+//   //   </div>));
 
-  return(
-    <>
-      {/* <User user={logs[0]} /> */}
-      {/* <SeparateList /> */}
-      {temp.map(user => (<User user={user} key={user.id} />))}
-    </>
-  )
-}
+//   return(
+//     <>
+//       {/* <User user={logs[0]} /> */}
+//       {/* <SeparateList /> */}
+//       {temp.map(user => (<User user={user} key={user.id} />))}
+//     </>
+//   )
+// }
 
-function RenderList({index}) {
+// function RenderList({index}) {
   
-  return(
-    <>
-      {/* <User user={logs[0]} /> */}
-      {logs.map(user => (<User user={user} key={user.id} />))}
-    </>
-  )
-}
+//   return(
+//     <>
+//       {/* <User user={logs[0]} /> */}
+//       {logs.map(user => (<User user={user} key={user.id} />))}
+//     </>
+//   )
+// }
 
 const LogShowLine = styled.div`
   padding: 0.3rem 0px;
@@ -374,7 +362,7 @@ const ContextStyle = styled.span`
 function ReturnSubject({value}) {
   return (
     <LogShowLine>
-      <TitleStyle>질문: </TitleStyle>
+      {/* <TitleStyle>질문: </TitleStyle> */}
       <ContextStyle>{value}</ContextStyle>
     </LogShowLine>
   );
@@ -383,7 +371,7 @@ function ReturnSubject({value}) {
 function ReturnInput({value}) {
   return (
     <LogShowLine>
-      <TitleStyle>나의영작: </TitleStyle>
+      {/* <TitleStyle>나의영작: </TitleStyle> */}
       <ContextStyle>{value}</ContextStyle>
     </LogShowLine>
   );
@@ -392,7 +380,7 @@ function ReturnInput({value}) {
 function ReturnUserIntend({value}) {
   return (
     <LogShowLine>
-      <TitleStyle>나의의도: </TitleStyle>
+      {/* <TitleStyle>나의의도: </TitleStyle> */}
       <ContextStyle>{value}</ContextStyle>
     </LogShowLine>
   );
@@ -403,7 +391,7 @@ function ReturnOutput({value}) {
 
   return (
     <LogShowLine>
-      <TitleStyle>좋은영작: </TitleStyle>
+      {/* <TitleStyle>좋은영작: </TitleStyle> */}
       <ContextStyle>{value}</ContextStyle>
     </LogShowLine>
   );
@@ -413,7 +401,7 @@ function ReturnOutput({value}) {
 function ReturnUserIntendTrans({value}) {
   return (
     <LogShowLine>
-      <TitleStyle>좋은해석: </TitleStyle>
+      {/* <TitleStyle>좋은해석: </TitleStyle> */}
       <ContextStyle>{value}</ContextStyle>
     </LogShowLine>
   );
@@ -549,27 +537,251 @@ const SwipeButtonRight = styled.button`
   }`
   
 
-const Swipe = () => {
+// const Swipe = () => {
 
-  const [state, setState] = useState(0);
+//   const [lists, setLists] = useState(0);
+
+//   const onClickLeft = () => {
+//     setLists(prev => prev - 1)
+//   }
+  
+//   const onClickRight = () => {
+  
+//     setLists(prev => prev + 1);
+//   }
+
+//   const handleChangeIndex = index => {
+//     setLists(index);
+//   }
+
+//   const LeftNotShow = () => {
+//     if(lists !== 0) {
+//       return(
+//         <SwipeButtonLeft onClick={onClickLeft}>
+//           <img src={require('../icons/before.png')} />
+//         </SwipeButtonLeft>
+//       )
+//     }
+//     else {
+//       return(
+//         null
+//       )
+//     }
+//   }
+
+//   const RightNotShow = () => {
+//     if(state !== logs.length - 1) {
+//       return(
+//         <SwipeButtonRight onClick={onClickRight}>
+//           <img src={require('../icons/next.png')}/>
+//         </SwipeButtonRight>
+//       )
+//     }
+//     else {
+//       return(
+//         null
+//       )
+//     }
+//   }
+
+//   return (
+//     <>
+//       <VirtualizeSwipeableViews 
+//         index={lists}
+//         onChangeIndex={handleChangeIndex}
+//         slideRenderer={slideRenderer}
+//         slideCount={logs.length}
+//         enableMouseEvents
+//       />
+//       <LeftNotShow />
+//       <RightNotShow />
+//       {/* <SwipeButtonLeft onClick={onClickLeft}>
+//         <img src={require('../icons/before.png')} />
+//       </SwipeButtonLeft> */}
+//       {/* <SwipeButtonRight onClick={onClickRight}>
+//         <img src={require('../icons/next.png')}/>
+//       </SwipeButtonRight> */}
+//     </>
+//   );
+// };
+
+
+
+
+{/* Large show box - for button operation */}
+
+// const LargeShowBox =() => {
+//   const onClickLeft = (e) => {
+//   }
+  
+//   const onClickRight = (e) => {
+//   }
+  
+
+//   return (
+//     <ShowBox>
+//       <SwipeButtonLeft onClick={onClickLeft}>
+//         <img src={require('../icons/before.png')} />
+//       </SwipeButtonLeft>
+//       <SwipeButtonRight onClick={onClickRight}>
+//         <img src={require('../icons/next.png')}/>
+//       </SwipeButtonRight>
+//       <Swipe />
+//     </ShowBox>
+//   )
+// }
+
+
+{
+  /* Rendering at DOM */
+}
+// const LogsPage = props => {
+
+//   return (
+//     <>
+//       <Header />
+//       <Main>
+//         <WholeBox>
+//           <SearchBox>
+//             <SearchInput></SearchInput>
+//             <SearchButtons>
+//               <img src={require('../icons/search.png')} />
+//             </SearchButtons>
+//             <ClockButton />
+//           </SearchBox>
+//           {/* <LargeShowBox /> */}
+//           <ShowBox>
+//             {/* <SwipeButtonLeft onClick={onClickLeft}>
+//               <img src={require('../icons/before.png')} />
+//             </SwipeButtonLeft>
+//             <SwipeButtonRight onClick={onClickRight}>
+//               <img src={require('../icons/next.png')}/>
+//             </SwipeButtonRight> */}
+//             <Swipe />
+//           </ShowBox>
+//         </WholeBox>
+//       </Main>
+//     </>
+//   );
+// };
+
+
+
+
+const LogsPage = props => {
+  // set array
+  const [logs, setLogs] = useState(logs_backup);
+
+  // Modal
+  const [state, setState] = useState(false);
+
+  const onClickOpen = e => {
+    e.preventDefault();
+    
+
+    setState(prevState => !prevState);
+    
+    
+  };
+
+  const onClickClose = (e) => {
+    e.preventDefault();
+    
+
+    setState(prevState => !prevState);
+    
+  };
+
+
+  // Calender
+
+  const [day, setDay] = useState(new Date());
+
+  //setter : value or function
+  // function = (prev) => {}
+  const onDateChange = (date) => {
+    // setState({ date: moment(date).format('YYYY-MM-DD') })
+        setDay(date);
+    
+  };
+
+  const onClickSelect = () => {
+
+    let date_temp = [];
+    for(let j = 0; j < logs.length; j++){
+      const date_log = logs[j].created_at;
+      const date_search = day;
+
+      const first = moment(date_log).format("YYYY MM DD");
+      const second = moment(date_search).format("YYYY MM DD");
+
+
+      if (first === second){
+
+        date_temp.push(logs[j]);
+        // setLogs(date_temp);
+        setLists(date_temp.length);
+      }
+    }
+
+
+    // logs = date_temp;
+    
+    
+    console.log(date_temp);
+    setLogs(date_temp);
+    console.log(logs);
+    setState(prevState => !prevState);
+    
+  }
+
+  const CalendarClose = styled.button`
+    background-color: #808080;
+    border: none;
+    color: white;
+    padding: 0.5rem;
+    text-align: center;
+    text-decoraton: none;
+    display: inline-block;
+    font-size: 1rem;
+    margin: 0.3rem;
+  `
+
+  const CalendarSelect = styled.button`
+    background-color: #808080;
+    border: none;
+    color: white;
+    padding: 0.5rem;
+    text-align: center;
+    text-decoraton: none;
+    display: inline-block;
+    font-size: 1rem;
+    margin: 0.3rem;
+  `
+
+
+
+  {/* Swipe */}
+
+  const [lists, setLists] = useState(0);
 
   const onClickLeft = () => {
-    console.log("click left and minus 1");
-    setState(prev => prev - 1)
+    
+    setLists(prev => prev - 1)
   }
   
   const onClickRight = () => {
   
-    console.log("click right and plus 1");
-    setState(prev => prev + 1);
+    
+    setLists(prev => prev + 1);
   }
 
   const handleChangeIndex = index => {
-    setState(index);
+    setLists(index);
   }
 
   const LeftNotShow = () => {
-    if(state !== 0) {
+    if(lists !== 0) {
       return(
         <SwipeButtonLeft onClick={onClickLeft}>
           <img src={require('../icons/before.png')} />
@@ -584,9 +796,10 @@ const Swipe = () => {
   }
 
   const RightNotShow = () => {
-    console.log("why left is showing");
-    console.log(logs.length - 1);
-    if(state !== logs.length - 1) {
+    
+    
+    
+    if(lists !== logs.length - 1) {
       return(
         <SwipeButtonRight onClick={onClickRight}>
           <img src={require('../icons/next.png')}/>
@@ -600,61 +813,71 @@ const Swipe = () => {
     }
   }
 
-  return (
-    <>
-      <VirtualizeSwipeableViews 
-        index={state}
-        onChangeIndex={handleChangeIndex}
-        slideRenderer={slideRenderer}
-        slideCount={logs.length}
-        enableMouseEvents
-      />
-      <LeftNotShow />
-      <RightNotShow />
-      {/* <SwipeButtonLeft onClick={onClickLeft}>
-        <img src={require('../icons/before.png')} />
-      </SwipeButtonLeft> */}
-      {/* <SwipeButtonRight onClick={onClickRight}>
-        <img src={require('../icons/next.png')}/>
-      </SwipeButtonRight> */}
-    </>
-  );
-};
-
-
-
-
-{/* Large show box - for button operation */}
-
-const LargeShowBox =() => {
-  const onClickLeft = (e) => {
-    console.log("click left");
+  function User({ user }) {
+    let output = '';
+    let output_trans = '';
+    if (user.feedback) {
+      output = user.comprehanded;
+      output_trans = user.translated;
+    }
+    else{
+      output = user.user_intention_translated;
+      output_trans = user.user_intention;
+    };
+  
+    return (
+      <>
+        <PageStyle>
+          <ReturnDate value={user.created_at} />
+          <LogShowBlock>
+            <BubbleLeft>
+              <ReturnSubject value={user.question}/>
+            </BubbleLeft>
+          </LogShowBlock>        
+          <LogShowBlock>
+            <BubbleRight>
+              <ReturnInput value={user.original} />
+              <ReturnUserIntend value={user.translated} />
+            </BubbleRight>
+          </LogShowBlock>
+          <LogShowBlock>
+            <BubbleLeft>
+              <ReturnOutput value={output} />
+              <ReturnUserIntendTrans value={output_trans} />
+            </BubbleLeft>
+          </LogShowBlock>
+        </PageStyle>
+      </>
+    );
   }
   
-  const onClickRight = (e) => {
-    console.log("click right");
-  }
+  function slideRenderer(params) {
+    const{index, key} = params;
+    let temp = [];
   
+    for (let i = 0; i < index + 1; i++) {
+      temp = [logs[i]];
+    }
+    
+    
+    
+    // const SeparateList = () => 
+    //   temp.map(o => (<div key={key}>
+    //     {o}
+    //   </div>));
+  
+    return(
+      <>
+        {/* <User user={logs[0]} /> */}
+        {/* <SeparateList /> */}
+        {temp.map(user => (<User user={user} key={user.id} />))}
 
-  return (
-    <ShowBox>
-      <SwipeButtonLeft onClick={onClickLeft}>
-        <img src={require('../icons/before.png')} />
-      </SwipeButtonLeft>
-      <SwipeButtonRight onClick={onClickRight}>
-        <img src={require('../icons/next.png')}/>
-      </SwipeButtonRight>
-      <Swipe />
-    </ShowBox>
-  )
-}
+      </>
+    )
+  }
 
 
-{
-  /* Rendering at DOM */
-}
-const LogsPage = props => {
-
+  
   return (
     <>
       <Header />
@@ -665,7 +888,20 @@ const LogsPage = props => {
             <SearchButtons>
               <img src={require('../icons/search.png')} />
             </SearchButtons>
-            <ClockButton />
+            <ClockButtons type="button" onClick={onClickOpen}>
+              <img src={require('../icons/clock.png')} />
+            </ClockButtons>
+            <ModalWapper display={state}>
+              <Modal>
+                <ModalTitle>타임머신</ModalTitle>
+                <Calendar onChange={onDateChange} value={day} />
+                <CloseWrapper>
+                  <CalendarClose onClick={onClickClose}>취소</CalendarClose>
+                  {/* <CalendarSelect onClick={onClickSelect}>선택</CalendarSelect> */}
+                  {/* <b>value: {day}</b> */}
+                </CloseWrapper>
+              </Modal>
+            </ModalWapper>
           </SearchBox>
           {/* <LargeShowBox /> */}
           <ShowBox>
@@ -675,12 +911,22 @@ const LogsPage = props => {
             <SwipeButtonRight onClick={onClickRight}>
               <img src={require('../icons/next.png')}/>
             </SwipeButtonRight> */}
-            <Swipe />
+            <VirtualizeSwipeableViews 
+              index={lists}
+              onChangeIndex={handleChangeIndex}
+              slideRenderer={slideRenderer}
+              slideCount={logs.length}
+              enableMouseEvents
+            />
+            <LeftNotShow />
+            <RightNotShow />
           </ShowBox>
         </WholeBox>
       </Main>
     </>
   );
 };
+
+
 
 export default LogsPage;
