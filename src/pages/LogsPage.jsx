@@ -3,7 +3,7 @@ import Header from '../components/Header';
 import Main from '../components/Main';
 import styled from 'styled-components';
 import SwipeableViews from 'react-swipeable-views';
-import { bindKeyboard } from 'react-swipeable-views-utils';
+import { virtualize, bindKeyboard } from 'react-swipeable-views-utils';
 import Calendar from 'react-calendar';
 import '../font.css';
 
@@ -281,6 +281,28 @@ function User({ user }) {
   );
 }
 
+function slideRenderer(params) {
+  const{index, key} = params;
+  let temp = [];
+
+  for (let i = 0; i < index + 1; i++) {
+    temp = [logs[i]];
+  }
+
+  // const SeparateList = () => 
+  //   temp.map(o => (<div key={key}>
+  //     {o}
+  //   </div>));
+
+  return(
+    <>
+      {/* <User user={logs[0]} /> */}
+      {/* <SeparateList /> */}
+      {temp.map(user => (<User user={user} key={user.id} />))}
+    </>
+  )
+}
+
 function RenderList({index}) {
   
   return(
@@ -380,6 +402,7 @@ const LogShowBlock = styled.div`
   /* Swipe */
 }
 const BindKey = bindKeyboard(SwipeableViews);
+const VirtualizeSwipeableViews = virtualize(SwipeableViews);
 
 const PageStyle = styled.div`
   padding: 0.6rem;
@@ -452,40 +475,6 @@ const BubbleLeft = styled.div`
   
 `
 
-const Swipe = () => {
-  const List = () => [1,2,3].map(o => <PageStyle>{o}</PageStyle>)
-
-  return (
-    <SwipeableViews key={logs.length} enableMouseEvents>
-      
-      {/* <PageStyle>
-        <ReturnDate />
-        <LogShowBlock>
-          <BubbleLeft>
-            <ReturnSubject />
-          </BubbleLeft>
-        </LogShowBlock>        
-        <LogShowBlock>
-          <BubbleRight>
-            <ReturnInput />
-            <ReturnUserIntend />
-          </BubbleRight>
-        </LogShowBlock>
-        <LogShowBlock>
-          <BubbleLeft>
-            <ReturnOutput />
-            <ReturnUserIntendTrans />
-          </BubbleLeft>
-        </LogShowBlock>
-      </PageStyle> */}
-      {/* <RenderList /> */}
-      <List/>
-      <PageStyle>slide 2</PageStyle>
-      <PageStyle>slide 3</PageStyle>
-    </SwipeableViews>
-  );
-};
-
 {/* Swipe Button */}
 const SwipeButtonLeft = styled.button`
   outline-color: #d48a6e;
@@ -530,26 +519,107 @@ const SwipeButtonRight = styled.button`
     width: 1rem;
     height: 2rem;
     vertical-align: middle;
+  }`
+  
+
+const Swipe = () => {
+
+  const [state, setState] = useState(0);
+
+  const onClickLeft = () => {
+    console.log("click left and minus 1");
+    setState(prev => prev - 1)
   }
   
-`
+  const onClickRight = () => {
+  
+    console.log("click right and plus 1");
+    setState(prev => prev + 1);
+  }
 
-const SwipeButtonImage = styled.img`
-  border: none;
-  background-color: none;
-  width: 1rem;
-  height: 2rem;
-  vertical-align: middle;
-  position: absolute;
-`
+  const handleChangeIndex = index => {
+    setState(index);
+  }
 
-const onClickLeft = (e) => {
-  console.log("click left");
+  const LeftNotShow = () => {
+    if(state !== 0) {
+      return(
+        <SwipeButtonLeft onClick={onClickLeft}>
+          <img src={require('../icons/before.png')} />
+        </SwipeButtonLeft>
+      )
+    }
+    else {
+      return(
+        null
+      )
+    }
+  }
+
+  const RightNotShow = () => {
+    if(state !== logs.length - 1) {
+      return(
+        <SwipeButtonRight onClick={onClickRight}>
+          <img src={require('../icons/next.png')}/>
+        </SwipeButtonRight>
+      )
+    }
+    else {
+      return(
+        null
+      )
+    }
+  }
+
+  return (
+    <>
+      <VirtualizeSwipeableViews 
+        index={state}
+        onChangeIndex={handleChangeIndex}
+        slideRenderer={slideRenderer}
+        slideCount={logs.length}
+        enableMouseEvents
+      />
+      <LeftNotShow />
+      <RightNotShow />
+      {/* <SwipeButtonLeft onClick={onClickLeft}>
+        <img src={require('../icons/before.png')} />
+      </SwipeButtonLeft> */}
+      {/* <SwipeButtonRight onClick={onClickRight}>
+        <img src={require('../icons/next.png')}/>
+      </SwipeButtonRight> */}
+    </>
+  );
+};
+
+
+
+
+{/* Large show box - for button operation */}
+
+const LargeShowBox =() => {
+  const onClickLeft = (e) => {
+    console.log("click left");
+  }
+  
+  const onClickRight = (e) => {
+    console.log("click right");
+  }
+  
+
+  return (
+    <ShowBox>
+      <SwipeButtonLeft onClick={onClickLeft}>
+        <img src={require('../icons/before.png')} />
+      </SwipeButtonLeft>
+      <SwipeButtonRight onClick={onClickRight}>
+        <img src={require('../icons/next.png')}/>
+      </SwipeButtonRight>
+      <Swipe />
+    </ShowBox>
+  )
 }
 
-const onClickRight = (e) => {
-  console.log("click right");
-}
 
 {
   /* Rendering at DOM */
@@ -568,26 +638,15 @@ const LogsPage = props => {
             </SearchButtons>
             <ClockButton />
           </SearchBox>
+          {/* <LargeShowBox /> */}
           <ShowBox>
-            <SwipeButtonLeft onClick={onClickLeft}>
+            {/* <SwipeButtonLeft onClick={onClickLeft}>
               <img src={require('../icons/before.png')} />
             </SwipeButtonLeft>
             <SwipeButtonRight onClick={onClickRight}>
               <img src={require('../icons/next.png')}/>
-            </SwipeButtonRight>
+            </SwipeButtonRight> */}
             <Swipe />
-
-            {/* <SwipeableViews>
-              <div>
-                slide 1
-              </div>
-              <div>
-                slide 2
-              </div>
-              <div>
-                slide 3
-              </div>
-            </SwipeableViews> */}
           </ShowBox>
         </WholeBox>
       </Main>
