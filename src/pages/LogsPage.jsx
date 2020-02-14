@@ -13,27 +13,42 @@ import '../font.css';
 const logs = [
   {
     id: '1',
-    date: '2020-02-05',
-    subject: 'daily log',
-    input: 'I ate milk-tea. It was so delicious.',
-    output: 'I ate mild tea. It was so delicious.',
-    user_intend: '나는 밀크티를 먹었다. 매우 맛있었다.',
-    user_intend_translate: '나는 밀크티를 먹었다. 매우 맛있었다.'
+    created_at: '2020-02-05',
+    feedback: true,
+    question: 'What are you doing now?',
+    original: 'I ate milk-tea. It was so delicious.',
+    translated: '피드백 트루',
+    comprehanded: 'true',
+    user_intention: '피드백 펄스',
+    user_intention_translated: 'false'
   },
   {
     id: '2',
-    date: '2020-02-12',
-    subject: 'favorite music',
-    input: 'I like ambition music. There music is so emphathsis.',
-    output: 'I like ambition music. Music is very sympathetic there.',
-    user_intend: '나는 엠비션 뮤직을 좋아한다. 그들의 음악은 매우 공감된다.',
-    usr_intend_translate: '나는 엠비션 뮤직을 좋아한다. 그들의 음악은 매우 공감된다.'
+    created_at: '2020-02-13',
+    feedback: false,
+    question: 'What are your favorite musics? And Why?',
+    original: 'I like ambition music. There music is so emphathsis.',
+    translated: '피드백 트루',
+    comprehanded: 'true',
+    user_intention: '피드백 펄스',
+    user_intention_translated: 'false'
+  },
+  {
+    id: '3',
+    created_at: '2020-02-14',
+    feedback: true,
+    question: 'What are your favorite musics? And Why?',
+    original: 'I like ambition music. There music is so emphathsis.',
+    translated: '피드백 트루',
+    comprehanded: 'true',
+    user_intention: '피드백 펄스',
+    user_intention_translated: 'false'
   }
 ];
 
-{
-  /* tag + style components */
-}
+
+{ /* tag + style components */ }
+
 const WholeBox = styled.div`
   position: absolute;
   top: 50%;
@@ -99,8 +114,8 @@ const ClockButtons = styled.button`
 
 const ShowBox = styled.div`
   width: 20rem;
-  height: 25rem;
-  margin-top: 1rem;
+  height: 28rem;
+  margin-top: 1.5rem;
 `;
 
 {
@@ -127,14 +142,19 @@ const Modal = styled.div`
 `;
 
 const ModalTitle = styled.div`
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bold;
   text-align: center;
+  padding: 1rem;
 `;
 
 const CloseWrapper = styled.div`
   text-align: right;
 `;
+
+
+const moment = require('moment');
+
 
 const ClockButton = props => {
   // Modal
@@ -148,7 +168,7 @@ const ClockButton = props => {
     console.log(state);
   };
 
-  const onClickClose = e => {
+  const onClickClose = (e) => {
     e.preventDefault();
     console.log('close');
 
@@ -156,18 +176,50 @@ const ClockButton = props => {
     console.log(state);
   };
 
+
   // Calender
-  const moment = require('moment');
 
-  const date = {
-    day: new Date()
+  const [day, setDay] = useState(new Date());
+
+  //setter : value or function
+  // function = (prev) => {}
+  const onDateChange = (date) => {
+    // setState({ date: moment(date).format('YYYY-MM-DD') })
+    // console.log(date);
+    setDay(date);
+    console.log(day);
   };
 
-  const onDateChange = date => {
-    setState({
-      date: moment(date).format('YYYY-MM-DD')
-    });
-  };
+  const onClickSelect = () => {
+    console.log('close and date print')
+
+    setState(prevState => !prevState);
+    console.log(day);
+  }
+
+  const CalendarClose = styled.button`
+    background-color: #808080;
+    border: none;
+    color: white;
+    padding: 0.5rem;
+    text-align: center;
+    text-decoraton: none;
+    display: inline-block;
+    font-size: 1rem;
+    margin: 0.3rem;
+  `
+
+  const CalendarSelect = styled.button`
+    background-color: #808080;
+    border: none;
+    color: white;
+    padding: 0.5rem;
+    text-align: center;
+    text-decoraton: none;
+    display: inline-block;
+    font-size: 1rem;
+    margin: 0.3rem;
+  `
 
   return (
     <>
@@ -177,10 +229,11 @@ const ClockButton = props => {
       <ModalWapper display={state}>
         <Modal>
           <ModalTitle>타임머신</ModalTitle>
-          <Calendar onChange={onDateChange} value={date.day} />
+          <Calendar onChange={onDateChange} value={day} />
           <CloseWrapper>
-            <button onClick={onClickClose}>취소</button>
-            <button>선택</button>
+            <CalendarClose onClick={onClickClose}>취소</CalendarClose>
+            <CalendarSelect onClick={onClickSelect}>선택</CalendarSelect>
+            {/* <b>value: {day}</b> */}
           </CloseWrapper>
         </Modal>
       </ModalWapper>
@@ -188,19 +241,54 @@ const ClockButton = props => {
   );
 };
 
-{
-  /* Parsing Databaset datasets and Showing */
-}
-function User({ user, isDate, isSubject, isInput, isOutput, isHangeul }) {
+{ /* Parsing Databaset datasets and Showing */ }
+
+function User({ user }) {
+  let output = '';
+  let output_trans = '';
+  if (user.feedback) {
+    output = user.comprehanded;
+    output_trans = user.translated;
+  }
+  else{
+    output = user.user_intention_translated;
+    output_trans = user.user_intention;
+  };
+
   return (
-    <span>
-      {isDate && user.date}
-      {isSubject && user.subject}
-      {isInput && user.input}
-      {isOutput && user.output}
-      {isHangeul && user.hangeul}
-    </span>
+    <>
+      <PageStyle>
+        <ReturnDate value={user.created_at} />
+        <LogShowBlock>
+          <BubbleLeft>
+            <ReturnSubject value={user.question}/>
+          </BubbleLeft>
+        </LogShowBlock>        
+        <LogShowBlock>
+          <BubbleRight>
+            <ReturnInput value={user.original} />
+            <ReturnUserIntend value={user.translated} />
+          </BubbleRight>
+        </LogShowBlock>
+        <LogShowBlock>
+          <BubbleLeft>
+            <ReturnOutput value={output} />
+            <ReturnUserIntendTrans value={output_trans} />
+          </BubbleLeft>
+        </LogShowBlock>
+      </PageStyle>
+    </>
   );
+}
+
+function RenderList({index}) {
+  
+  return(
+    <>
+      {/* <User user={logs[0]} /> */}
+      {logs.map(user => (<User user={user} key={user.id} />))}
+    </>
+  )
 }
 
 const LogShowLine = styled.div`
@@ -209,17 +297,19 @@ const LogShowLine = styled.div`
 `;
 
 const DateStyle = styled.div`
-  color: Red;
+  color: #495057;
   font-size: 0.8rem;
-  padding-top: 0.3rem;
-  padding-bottom: 0.6rem;
+  padding: 0.5rem 0;
   font-weight: bold;
+  text-align: center;
+  border-top: 1px solid #495057;
+  border-bottom: 1px solid #495057;
 `;
 
-function ReturnDate() {
+function ReturnDate({value}) {
   return (
 
-    <DateStyle># 2019-02-13</DateStyle>
+    <DateStyle>{value}</DateStyle>
 
   );
 }
@@ -232,49 +322,53 @@ const ContextStyle = styled.span`
   font-size: 0.9rem;
 `;
 
-function ReturnSubject() {
+function ReturnSubject({value}) {
   return (
     <LogShowLine>
       <TitleStyle>질문: </TitleStyle>
-      <ContextStyle>오늘 점심 뭐 먹었어?</ContextStyle>
+      <ContextStyle>{value}</ContextStyle>
     </LogShowLine>
   );
 }
 
-function ReturnInput() {
+function ReturnInput({value}) {
   return (
     <LogShowLine>
       <TitleStyle>나의영작: </TitleStyle>
-      <ContextStyle>I drink water.</ContextStyle>
+      <ContextStyle>{value}</ContextStyle>
     </LogShowLine>
   );
 }
 
-function ReturnUserIntend() {
+function ReturnUserIntend({value}) {
   return (
     <LogShowLine>
       <TitleStyle>나의의도: </TitleStyle>
-      <ContextStyle>나는 물을 마셨다</ContextStyle>
+      <ContextStyle>{value}</ContextStyle>
     </LogShowLine>
   );
 }
 
-function ReturnOutput() {
+function ReturnOutput({value}) {
+  
+
   return (
     <LogShowLine>
       <TitleStyle>좋은영작: </TitleStyle>
-      <ContextStyle>I drink water.</ContextStyle>
+      <ContextStyle>{value}</ContextStyle>
     </LogShowLine>
   );
+
 }
 
-function ReturnUserIntendTrans() {
+function ReturnUserIntendTrans({value}) {
   return (
     <LogShowLine>
       <TitleStyle>좋은해석: </TitleStyle>
-      <ContextStyle>나는 물을 마셨다.</ContextStyle>
+      <ContextStyle>{value}</ContextStyle>
     </LogShowLine>
   );
+
 }
 
 const LogShowBlock = styled.div`
@@ -289,12 +383,15 @@ const BindKey = bindKeyboard(SwipeableViews);
 
 const PageStyle = styled.div`
   padding: 0.6rem;
-  height: 22rem;
+  margin: 0 1.5rem;
+  min-height: 26rem;
+  max-height: 26rem;
   color: black;
 
   background-color: #e4efff;
   z-index: 1;
   border-radius: 10px;
+  overflow: scroll;
 `;
 
 const BubbleRight = styled.div`
@@ -352,19 +449,22 @@ const BubbleLeft = styled.div`
     z-index: 1;
   }
 
+  
 `
 
-
-
 const Swipe = () => {
+  const List = () => [1,2,3].map(o => <PageStyle>{o}</PageStyle>)
+
   return (
-    <BindKey>
-      <PageStyle>
+    <SwipeableViews key={logs.length} enableMouseEvents>
+      
+      {/* <PageStyle>
         <ReturnDate />
-        <BubbleLeft>
-          <ReturnSubject />
-        </BubbleLeft>
-        
+        <LogShowBlock>
+          <BubbleLeft>
+            <ReturnSubject />
+          </BubbleLeft>
+        </LogShowBlock>        
         <LogShowBlock>
           <BubbleRight>
             <ReturnInput />
@@ -377,17 +477,85 @@ const Swipe = () => {
             <ReturnUserIntendTrans />
           </BubbleLeft>
         </LogShowBlock>
-      </PageStyle>
+      </PageStyle> */}
+      {/* <RenderList /> */}
+      <List/>
       <PageStyle>slide 2</PageStyle>
       <PageStyle>slide 3</PageStyle>
-    </BindKey>
+    </SwipeableViews>
   );
 };
+
+{/* Swipe Button */}
+const SwipeButtonLeft = styled.button`
+  outline-color: #d48a6e;
+  margin-right: 0px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  left: 0;
+  top: 15rem;
+  width: 1rem;
+  height: 2rem;
+  padding: 0 0 0 0 !important;
+  position: absolute;
+
+  img {
+    border: none;
+    background-color: none;
+    width: 1rem;
+    height: 2rem;
+    vertical-align: middle;
+  }
+`
+
+const SwipeButtonRight = styled.button`
+  outline-color: #d48a6e;
+  margin-right: 0px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 15rem;
+  width: 1rem;
+  height: 2rem;
+  padding: 0 0 0 0 !important;
+  position: absolute;
+
+  img {
+    border: none;
+    background-color: none;
+    width: 1rem;
+    height: 2rem;
+    vertical-align: middle;
+  }
+  
+`
+
+const SwipeButtonImage = styled.img`
+  border: none;
+  background-color: none;
+  width: 1rem;
+  height: 2rem;
+  vertical-align: middle;
+  position: absolute;
+`
+
+const onClickLeft = (e) => {
+  console.log("click left");
+}
+
+const onClickRight = (e) => {
+  console.log("click right");
+}
 
 {
   /* Rendering at DOM */
 }
 const LogsPage = props => {
+
   return (
     <>
       <Header />
@@ -401,7 +569,14 @@ const LogsPage = props => {
             <ClockButton />
           </SearchBox>
           <ShowBox>
+            <SwipeButtonLeft onClick={onClickLeft}>
+              <img src={require('../icons/before.png')} />
+            </SwipeButtonLeft>
+            <SwipeButtonRight onClick={onClickRight}>
+              <img src={require('../icons/next.png')}/>
+            </SwipeButtonRight>
             <Swipe />
+
             {/* <SwipeableViews>
               <div>
                 slide 1
