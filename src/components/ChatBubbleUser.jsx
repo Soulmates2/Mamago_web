@@ -2,39 +2,35 @@ import React, {useState} from 'react';
 import styled from 'styled-components';
 
 
-const BubbleBox = styled.div`
-  margin-top: 8px;
-  margin-bottom: 8px;
-  display:flex;
-  font-family: sans-serif;
-  font-size: 14px;
-  align-items: center;
-`
+const ChatBubbleUser = styled.div`
+  position:relative;
+  padding: 0.5rem 1rem;
+  color: black;
+  border-radius: 30px;
+  
+  margin-top: 4px;
+  margin-left: 1rem;
+  margin-right: 6rem;
+  background: #d1c4e9;
+  z-index: 2;
 
-const Bubble = styled.div`
-  background-color: #F2F2F2;
-  border-radius: 5px;
-  box-shadow: 0 0 6px #B2B2B2;
-  display: block;
-  padding: 10px 18px;
-  position: relative;
-  vertical-align: top;
-  color: white;
-  word-wrap: break-word;
-`
+  font-size: 1rem;
 
-const BubbleBefore = styled.div`
-    background-color: #F2F2F2;
-    content: "\00a0";
-    display: block;
-    height: 16px;
+  :after {
+    content: "";
     position: absolute;
-    top: 11px;
-    transform:             rotate( 29deg ) skew( -35deg );
-        -moz-transform:    rotate( 29deg ) skew( -35deg );
-        -ms-transform:     rotate( 29deg ) skew( -35deg );
-        -o-transform:      rotate( 29deg ) skew( -35deg );
-        -webkit-transform: rotate( 29deg ) skew( -35deg );
-    width:  20px;
+    border-style: solid;
+    /* reduce the damage in FF3.0 */
+    display:block;
+    width: 0;
 
+    top: 1rem;
+    left: -1.3rem; /* value = - border-left-width - border-right-width */
+    bottom:auto;
+    border-width: 1rem 1.5rem 0 0; /* vary these values to change the angle of the vertex */
+    border-color:transparent #d1c4e9;
+    z-index: 1;
+  }
 `
+
+export default ChatBubbleUser;

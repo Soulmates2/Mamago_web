@@ -13,7 +13,7 @@ import styled from 'styled-components';
 const NavHeader = styled.nav`
   padding: 0.5rem 1rem !important;
   background-color: #333940;
-  letter-spacing: 0.05rem;
+  letter-spacing: 0.1rem;
   font-weight: bold;
   position: absolute;
   width: 100%;
@@ -25,7 +25,6 @@ const FontsHeader = styled.span`
   vertical-align: middle;
   color: white;
   text-transform: uppercase;
-  letter-spacing: 0.1rem;
 `;
 
 const Logo = styled.img`

@@ -2,7 +2,7 @@ import { SET_DIALOGS, UNSET_DIALOG, CLEAR_DIALOGS, SET_DIALOG } from '../types';
 
 const example = {
   id: '123124125',
-  question: 'hello, How was your day?',
+  question: 'Hello, How was your day?',
   // original: 'im so tired',
   translated: `I'm so tired`,
   comprehanded: '나는 피곤해',
@@ -21,7 +21,7 @@ export const dialogs = (state = [], { type, payload }) => {
   }
 };
 
-export const dialog = (state = example, { type, payload }) => {
+export const dialog = (state = {}, { type, payload }) => {
   switch (type) {
     case SET_DIALOG:
       return payload;

@@ -25,6 +25,7 @@ import I18n from 'i18next';
 //   user_intention: '안녕!',
 //   user_intention_translated: 'hello!'
 // };
+
 export const buildChats = dialog => {
   const {
     question,
@@ -36,25 +37,56 @@ export const buildChats = dialog => {
     user_intention_translated
   } = dialog;
   const chats = [];
-  if (question) chats.push(question);
+  const chat = { type: '', message: '' };
+
+  if (question) chats.push({ type: 'mamago', message: question });
+
   if (original) {
-    chats.push(original);
-    if (comprehanded) chats.push(I18n.t('comp_prefix') + comprehanded + I18n.t('comp_postfix'));
-    if (translated) chats.push(I18n.t('trans_prefix') + translated + I18n.t('trans_postfix'));
-    if (comprehanded) chats.push('내가 생각한 게 맞아?');
+    chats.push({ type: 'user', message: original });
+    if (comprehanded)
+      chats.push({
+        type: 'mamago',
+        message: I18n.t('comp_prefix') + comprehanded + I18n.t('comp_postfix')
+      });
+    if (translated)
+      chats.push({
+        type: 'mamago',
+        message: I18n.t('trans_prefix') + translated + I18n.t('trans_postfix')
+      });
+    if (comprehanded) chats.push({ type: 'mamago', message: '내가 생각한 게 맞아?' });
   }
+
   if (!R.isNil(feedback)) {
-    if (feedback) {
-      chats.push('맞아');
-      chats.push('잘했어!');
+    if (!feedback) {
+      chats.push({ type: 'user', message: '맞아' });
+      chats.push({ type: 'mamago', message: '잘했어!' });
+      return chats;
     } else {
-      chats.push('아니야');
-      chats.push('그렇다면 네가 의도한 것을 말해줄래?');
+      chats.push({ type: 'user', message: '아니야' });
+      chats.push({ type: 'mamago', message: '그렇다면 네가 의도한 것을 말해줄래?' });
     }
+
     if (user_intention) {
-      chats.push(user_intention);
-      if (user_intention_translated) chats.push(user_intention_translated);
+      chats.push({ type: 'user', message: user_intention });
+      if (user_intention_translated)
+        chats.push({ type: 'mamago', message: user_intention_translated });
     }
   }
   return chats;
+};
+
+export const validateEmail = email => {
+  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+    return true;
+  }
+  alert('You have entered an invalid email address!');
+  return false;
+};
+
+export const validatePassword = (password = '') => {
+  if (password.length >= 6) {
+    return true;
+  }
+  alert('Please Enter more than 5 letters!');
+  return false;
 };

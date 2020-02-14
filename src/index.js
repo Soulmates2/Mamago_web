@@ -9,7 +9,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n'; // initialized i18next instance
 import './i18n';
-
+import './index.css';
 import store from './store';
 
 const persistor = persistStore(store);
