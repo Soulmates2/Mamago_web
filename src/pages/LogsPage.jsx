@@ -9,6 +9,7 @@ import Calendar from 'react-calendar';
 import '../font.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUserDialogs } from '../actions/dialogs';
+import moment from 'moment';
 
 const WholeBox = styled.div`
   position: absolute;
@@ -137,93 +138,6 @@ const CalendarSelect = styled.button`
   margin: 0.3rem;
 `;
 
-const CalendarModal = props => {
-  // Modal
-  const [display, setDisplay] = useState(false);
-  const [day, setDay] = useState(new Date());
-
-  const onClickOpen = e => {
-    e.preventDefault();
-    setDisplay(true);
-  };
-
-  const onClickClose = e => {
-    e.preventDefault();
-    setDisplay(false);
-  };
-
-  const onDateChange = date => setDay(date);
-
-  const confirmDate = e => {
-    e.preventDefault();
-    setDisplay(false);
-  };
-
-  return (
-    <>
-      <ClockButtons type="button" onClick={onClickOpen}>
-        <img src={require('../icons/clock.png')} />
-      </ClockButtons>
-      <ModalWapper display={display}>
-        <Modal>
-          <ModalTitle>타임머신</ModalTitle>
-          <Calendar onChange={onDateChange} value={day} />
-          <CloseWrapper>
-            <CalendarClose onClick={onClickClose}>취소</CalendarClose>
-            <CalendarSelect onClick={confirmDate}>선택</CalendarSelect>
-            {/* <b>value: {day}</b> */}
-          </CloseWrapper>
-        </Modal>
-      </ModalWapper>
-    </>
-  );
-};
-
-{
-  /* Parsing Databaset datasets and Showing */
-}
-
-const DialogView = ({ dialog = {} }) => {
-  return (
-    <>
-      <PageStyle>
-        <ReturnDate value={dialog.created_at} />
-        <LogShowBlock>
-          <BubbleLeft>
-            <ReturnSubject value={dialog.question} />
-          </BubbleLeft>
-        </LogShowBlock>
-        <LogShowBlock>
-          <BubbleRight>
-            <ReturnInput value={dialog.original} />
-          </BubbleRight>
-          <BubbleLeft>
-            <ReturnUserIntend value={dialog.translated} />
-          </BubbleLeft>
-        </LogShowBlock>
-        {dialog.feedback ? (
-          <LogShowBlock>
-            <BubbleRight>
-              <ReturnOutput value={dialog.user_intention} />
-            </BubbleRight>
-            <BubbleLeft>
-              <ReturnUserIntendTrans value={dialog.user_intention_translated} />
-            </BubbleLeft>
-          </LogShowBlock>
-        ) : (
-          <LogShowBlock>
-            <BubbleLeft>
-              <LogShowLine>
-                <TitleStyle>잘했어요!</TitleStyle>
-              </LogShowLine>
-            </BubbleLeft>
-          </LogShowBlock>
-        )}
-      </PageStyle>
-    </>
-  );
-};
-
 const LogShowLine = styled.div`
   padding: 0.3rem 0px;
   font-size: 1rem;
@@ -239,10 +153,6 @@ const DateStyle = styled.div`
   border-bottom: 1px solid #495057;
 `;
 
-function ReturnDate({ value }) {
-  return <DateStyle>{value}</DateStyle>;
-}
-
 const TitleStyle = styled.span`
   font-weight: bold;
   font-size: 0.9rem;
@@ -251,60 +161,10 @@ const ContextStyle = styled.span`
   font-size: 0.9rem;
 `;
 
-function ReturnSubject({ value }) {
-  return (
-    <LogShowLine>
-      <TitleStyle>질문: </TitleStyle>
-      <ContextStyle>{value}</ContextStyle>
-    </LogShowLine>
-  );
-}
-
-function ReturnInput({ value }) {
-  return (
-    <LogShowLine>
-      <TitleStyle>나의영작: </TitleStyle>
-      <ContextStyle>{value}</ContextStyle>
-    </LogShowLine>
-  );
-}
-
-function ReturnUserIntend({ value }) {
-  return (
-    <LogShowLine>
-      <TitleStyle>마마고의 이해: </TitleStyle>
-      <ContextStyle>{value}</ContextStyle>
-    </LogShowLine>
-  );
-}
-
-function ReturnOutput({ value }) {
-  return (
-    <LogShowLine>
-      <TitleStyle>나의 의도: </TitleStyle>
-      <ContextStyle>{value}</ContextStyle>
-    </LogShowLine>
-  );
-}
-
-function ReturnUserIntendTrans({ value }) {
-  return (
-    <LogShowLine>
-      <TitleStyle>좋은 영작: </TitleStyle>
-      <ContextStyle>{value}</ContextStyle>
-    </LogShowLine>
-  );
-}
-
 const LogShowBlock = styled.div`
   padding: 0.5rem 0px;
   position: relative;
 `;
-
-{
-  /* Swipe */
-}
-const VirtualizeSwipeableViews = virtualize(SwipeableViews);
 
 const PageStyle = styled.div`
   padding: 0.6rem;
@@ -422,6 +282,151 @@ const SwipeButtonRight = styled.button`
     vertical-align: middle;
   }
 `;
+
+function ReturnDate({ value }) {
+  return <DateStyle>{value}</DateStyle>;
+}
+
+function ReturnSubject({ value }) {
+  return (
+    <LogShowLine>
+      <TitleStyle>질문: </TitleStyle>
+      <ContextStyle>{value}</ContextStyle>
+    </LogShowLine>
+  );
+}
+
+function ReturnInput({ value }) {
+  return (
+    <LogShowLine>
+      <TitleStyle>나의영작: </TitleStyle>
+      <ContextStyle>{value}</ContextStyle>
+    </LogShowLine>
+  );
+}
+
+function ReturnUserIntend({ value }) {
+  return (
+    <LogShowLine>
+      <TitleStyle>마마고의 이해: </TitleStyle>
+      <ContextStyle>{value}</ContextStyle>
+    </LogShowLine>
+  );
+}
+
+function ReturnOutput({ value }) {
+  return (
+    <LogShowLine>
+      <TitleStyle>나의 의도: </TitleStyle>
+      <ContextStyle>{value}</ContextStyle>
+    </LogShowLine>
+  );
+}
+
+function ReturnUserIntendTrans({ value }) {
+  return (
+    <LogShowLine>
+      <TitleStyle>좋은 영작: </TitleStyle>
+      <ContextStyle>{value}</ContextStyle>
+    </LogShowLine>
+  );
+}
+
+const CalendarModal = props => {
+  // Modal
+  const [display, setDisplay] = useState(false);
+  const [day, setDay] = useState(new Date());
+
+  const onClickOpen = e => {
+    e.preventDefault();
+    setDisplay(true);
+  };
+
+  const onClickClose = e => {
+    e.preventDefault();
+    setDisplay(false);
+  };
+
+  const onDateChange = date => setDay(date);
+
+  const confirmDate = e => {
+    e.preventDefault();
+    setDisplay(false);
+  };
+
+  return (
+    <>
+      <ClockButtons type="button" onClick={onClickOpen}>
+        <img src={require('../icons/clock.png')} />
+      </ClockButtons>
+      <ModalWapper display={display}>
+        <Modal>
+          <ModalTitle>타임머신</ModalTitle>
+          <Calendar onChange={onDateChange} value={day} />
+          <CloseWrapper>
+            <CalendarClose onClick={onClickClose}>취소</CalendarClose>
+            <CalendarSelect onClick={confirmDate}>선택</CalendarSelect>
+            {/* <b>value: {day}</b> */}
+          </CloseWrapper>
+        </Modal>
+      </ModalWapper>
+    </>
+  );
+};
+
+const DialogView = ({ dialog = {} }) => {
+  return (
+    <>
+      <PageStyle>
+        <ReturnDate
+          value={dialog.created_at ? moment(dialog.created_at).format('YYYY-MM-DD HH:mm:ss') : ''}
+        />
+        <LogShowBlock>
+          <BubbleLeft>
+            <ReturnSubject value={dialog.question} />
+          </BubbleLeft>
+        </LogShowBlock>
+        <LogShowBlock>
+          <BubbleRight>
+            <ReturnInput value={dialog.original} />
+          </BubbleRight>
+        </LogShowBlock>
+        <LogShowBlock>
+          <BubbleLeft>
+            <ReturnUserIntend value={dialog.translated} />
+          </BubbleLeft>
+        </LogShowBlock>
+        {dialog.feedback ? (
+          <>
+            <LogShowBlock>
+              <BubbleRight>
+                <ReturnOutput value={dialog.user_intention} />
+              </BubbleRight>
+            </LogShowBlock>
+            <LogShowBlock>
+              <BubbleLeft>
+                <ReturnUserIntendTrans value={dialog.user_intention_translated} />
+              </BubbleLeft>
+            </LogShowBlock>
+          </>
+        ) : (
+          <LogShowBlock>
+            <BubbleLeft>
+              <LogShowLine>
+                <TitleStyle>잘했어요!</TitleStyle>
+              </LogShowLine>
+            </BubbleLeft>
+          </LogShowBlock>
+        )}
+      </PageStyle>
+    </>
+  );
+};
+
+{
+  /* Swipe */
+}
+const VirtualizeSwipeableViews = virtualize(SwipeableViews);
 
 const SwipeBox = ({ dialogs }) => {
   const maxIndex = useMemo(() => dialogs.length, [dialogs]);
